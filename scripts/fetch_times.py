@@ -14,81 +14,95 @@ PLAYERS = {
 HEADERS = {"User-Agent": "RRT-Trackmania-Bot/1.0", "Accept": "application/json"}
 
 def get_json(url):
-    print(f"GET {url}")
+    print(f"TEST {url}")
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as r:
         text = r.read().decode("utf-8", errors="ignore")
     if text.strip().startswith("<"):
-        print(f"FAIL {url} HTML returned")
+        print(f"  -> HTML, pas bon")
         return None
-    return json.loads(text)
+    try:
+        data = json.loads(text)
+        if isinstance(data, dict):
+            print(f"  -> JSON OK, cles : {list(data.keys())[:15]}")
+        else:
+            print(f"  -> JSON OK, type : {type(data)}")
+        return data
+    except Exception as e:
+        print(f"  -> JSON invalide : {e}")
+        return None
 
-def find_maps(obj, depth=0):
-    if isinstance(obj, dict):
-        print(f"KEYS niveau {depth} : {list(obj.keys())[:20]}")
-        for k, v in obj.items():
-            if isinstance(v, list) and v and isinstance(v[0], dict):
-                first = v[0]
-                if any(x in first for x in ("mapUid", "uid", "map_uid", "mapId", "map")):
-                    print(f"MAPS trouves sous la cle '{k}' : {len(v)} circuits")
-                    return v
-            found = find_maps(v, depth + 1) if depth < 3 else None
-            if found:
-                return found
-    if isinstance(obj, list) and obj and isinstance(obj[0], dict):
-        first = obj[0]
-        if any(x in first for x in ("mapUid", "uid", "map_uid", "mapId")):
-            return obj
-    return None
+def extract_maps(data):
+    if isinstance(data, dict):
+        for k in ["maps", "playlist", "tracks", "campaignMaps"]:
+            if k in data and isinstance(data[k], list) and data[k]:
+                print(f"MAPS trouves sous '{k}' : {len(data[k])}")
+                return data[k]
+        for k, v in data.items():
+            if isinstance(v, dict):
+                found = extract_maps(v)
+                if found:
+                    return found
+            if isinstance(v, list) and v and isinstance(v[0], dict) and any(x in v[0] for x in ("mapUid", "uid", "map_uid")):
+                print(f"MAPS trouves sous '{k}' : {len(v)}")
+                return v
+    if isinstance(data, list) and data and isinstance(data[0], dict) and any(x in data[0] for x in ("mapUid", "uid")):
+        return data
+    return []
 
 def main():
-    url = f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}"
-    campaign = get_json(url)
-    if not campaign:
-        print("CAMPAGNE INTROUVABLE")
-        sys.exit(1)
-    print(f"OK campagne trouvee via {url}")
-    print("DEBUT JSON campagne (2000 premiers caracteres) :")
-    print(json.dumps(campaign, indent=2)[:2000])
-
-    maps = find_maps(campaign) or []
+    maps = []
+    candidates = [
+        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}/maps",
+        f"https://trackmania.io/api/campaigns/{CAMPAIGN_ID}/maps",
+        f"https://trackmania.io/api/campaign/{CAMPAIGN_ID}/maps",
+        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}/0",
+        f"https://trackmania.io/api/campaigns/{CAMPAIGN_ID}/0",
+        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}?page=0",
+        f"https://trackmania.io/api/maps?campaign={CAMPAIGN_ID}",
+        f"https://trackmania.io/api/campaigns/{CAMPAIGN_ID}",
+    ]
+    for url in candidates:
+        try:
+            data = get_json(url)
+            if not data:
+                continue
+            maps = extract_maps(data)
+            if maps:
+                print(f"GAGNE ! Circuits trouves via {url}")
+                break
+        except Exception as e:
+            print(f"  -> Erreur {url} : {e}")
     print(f"Nombre de circuits trouves : {len(maps)}")
     maps = maps[:10]
-
     result = {}
     for pid in PLAYERS:
         result[pid] = [None] * 10
-
     for idx, m in enumerate(maps):
-        uid = m.get("mapUid") or m.get("uid") or m.get("map_uid") or (m.get("map") or {}).get("uid") if isinstance(m.get("map"), dict) else None
+        uid = m.get("mapUid") or m.get("uid") or m.get("map_uid") or ((m.get("map") or {}).get("uid") if isinstance(m.get("map"), dict) else None)
         if not uid and isinstance(m.get("map"), dict):
             uid = m["map"].get("mapUid") or m["map"].get("uid")
-        name = m.get("name") or (m.get("map") or {}).get("name") if isinstance(m.get("map"), dict) else m.get("name")
-        print(f"Circuit {idx+1} : {name} uid={uid}")
+        name = m.get("name") or ((m.get("map") or {}).get("name") if isinstance(m.get("map"), dict) else None) or f"Circuit {idx+1}"
+        print(f"Circuit {idx+1} : {name} uid={uid} - GRATUIT, on garde")
         if not uid:
             continue
-        lb = None
         for lurl in [f"https://trackmania.io/api/leaderboard/map/{uid}", f"https://trackmania.io/api/leaderboard/map/{uid}?length=10000"]:
             try:
-                data = get_json(lurl)
-                if data:
-                    lb = data
-                    print(f"Leaderboard {uid} KEYS : {list(lb.keys())[:20] if isinstance(lb, dict) else type(lb)}")
-                    break
+                lb = get_json(lurl)
+                if not lb:
+                    continue
+                tops = lb.get("tops") or lb.get("leaderboard") or lb.get("results") or []
+                print(f"  Leaderboard : {len(tops)} lignes")
+                for entry in tops:
+                    player = entry.get("player") or {}
+                    acc = player.get("accountId") or entry.get("accountId") or player.get("id")
+                    if acc in result:
+                        t = entry.get("time") or entry.get("score")
+                        if t:
+                            result[acc][idx] = int(t)
+                break
             except Exception as e:
-                print(f"FAIL leaderboard {uid} : {e}")
-        if not lb:
-            continue
-        tops = lb.get("tops") or lb.get("leaderboard") or lb.get("results") or []
-        print(f"Leaderboard {uid} : {len(tops)} lignes")
-        for entry in tops:
-            player = entry.get("player") or {}
-            acc = player.get("accountId") or entry.get("accountId") or player.get("id")
-            if acc in result:
-                t = entry.get("time") or entry.get("score")
-                if t:
-                    result[acc][idx] = int(t)
-
+                print(f"  FAIL leaderboard {e}")
     out = {"campaignId": CAMPAIGN_ID, "times": result}
     with open("times.json", "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)

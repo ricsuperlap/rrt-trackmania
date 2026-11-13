@@ -1,6 +1,6 @@
 YAML
 name: RRT - Recuperer temps Trackmania
-on:
+"on":
   workflow_dispatch:
   schedule:
     - cron: "0 * * * *"

@@ -1,4 +1,4 @@
-YAML
+
 name: RRT - Recuperer temps Trackmania
 on:
   workflow_dispatch:

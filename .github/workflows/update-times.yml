@@ -1,0 +1,22 @@
+YAML
+name: RRT - Recuperer temps Trackmania
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python scripts/fetch_times.py
+      - run: |
+          git config user.name "RRT-Bot"
+          git config user.email "rrt-bot@users.noreply.github.com"
+          git add times.json
+          git diff --cached --quiet || git commit -m "Auto: mise a jour temps Trackmania"
+          git push

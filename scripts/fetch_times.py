@@ -1,6 +1,6 @@
 import json, urllib.request
 
-UID1 = "28ccb484-72ab-40d5-bb3c-653ca554ceb0"
+MAPUID1 = "ypPmohQofd72MyTsIsijKfrJH98"
 NICOLAS = "13eb345e-882a-402e-86f8-16db37d54911"
 
 HEADERS = {"User-Agent": "RRT-Trackmania-Bot/1.0", "Accept": "application/json"}
@@ -10,32 +10,24 @@ def get_json(url):
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as r:
         text = r.read().decode("utf-8", errors="ignore")
-    if text.strip().startswith("<"):
-        print(f"  -> HTML, pas bon")
-        return None
-    data = json.loads(text)
-    if isinstance(data, dict):
-        print(f"  -> JSON OK, cles : {list(data.keys())[:20]}")
-    else:
-        print(f"  -> JSON OK, liste de {len(data)} elements")
-    return data
+    return json.loads(text)
 
 def main():
-    for url in [
-        f"https://trackmania.io/api/leaderboard/map/{UID1}",
-        f"https://trackmania.io/api/leaderboard/map/{UID1}?length=100",
-        f"https://trackmania.io/api/maps/{UID1}",
-        f"https://trackmania.io/api/map/{UID1}",
-    ]:
-        try:
-            data = get_json(url)
-            if not data:
-                continue
-            print("  DEBUT JSON :")
-            print(json.dumps(data, indent=2)[:2000])
-        except Exception as e:
-            print(f"  -> Erreur : {e}")
-    print("FIN TEST CIRCUIT 1")
+    lb = get_json(f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?length=100")
+    print(f"CLES : {list(lb.keys())}")
+    tops = lb.get("tops") or []
+    print(f"Nombre de joueurs dans le classement : {len(tops) if tops else 0}")
+    print("PREMIERS JOUEURS :")
+    print(json.dumps(tops[:5], indent=2)[:2000])
+    print("RECHERCHE NICOLAS :")
+    for e in (tops or []):
+        player = e.get("player") or {}
+        if player.get("accountId") == NICOLAS or e.get("accountId") == NICOLAS:
+            print(f"TROUVE NICOLAS ! Temps = {e.get('time')} ms")
+            print(json.dumps(e, indent=2)[:1000])
+            break
+    else:
+        print("Nicolas pas dans les 100 premiers, on cherchera autrement")
 
 if __name__ == "__main__":
     main()

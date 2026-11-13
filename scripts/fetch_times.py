@@ -10,24 +10,44 @@ def get_json(url):
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as r:
         text = r.read().decode("utf-8", errors="ignore")
-    return json.loads(text)
+    if text.strip().startswith("<"):
+        print(f"  -> HTML")
+        return None
+    data = json.loads(text)
+    print(f"  -> CLES : {list(data.keys())[:10] if isinstance(data, dict) else 'liste'}")
+    return data
+
+def find_in(lb):
+    tops = (lb or {}).get("tops") or []
+    for e in tops:
+        player = e.get("player") or {}
+        if player.get("id") == NICOLAS or player.get("accountId") == NICOLAS:
+            print(f"TROUVE ! Position {e.get('position')}, Temps {e.get('time')} ms")
+            return True
+    print(f"  Pas trouve dans ce bout, {len(tops)} lignes")
+    return False
 
 def main():
-    lb = get_json(f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?length=100")
-    print(f"CLES : {list(lb.keys())}")
-    tops = lb.get("tops") or []
-    print(f"Nombre de joueurs dans le classement : {len(tops) if tops else 0}")
-    print("PREMIERS JOUEURS :")
-    print(json.dumps(tops[:5], indent=2)[:2000])
-    print("RECHERCHE NICOLAS :")
-    for e in (tops or []):
-        player = e.get("player") or {}
-        if player.get("accountId") == NICOLAS or e.get("accountId") == NICOLAS:
-            print(f"TROUVE NICOLAS ! Temps = {e.get('time')} ms")
-            print(json.dumps(e, indent=2)[:1000])
-            break
-    else:
-        print("Nicolas pas dans les 100 premiers, on cherchera autrement")
+    print("=== TEST 1 : 10000 premiers ===")
+    lb = get_json(f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?length=10000")
+    if lb:
+        find_in(lb)
+    print("=== TEST 2 : par joueur ===")
+    for url in [
+        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}/player/{NICOLAS}",
+        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?player={NICOLAS}",
+        f"https://trackmania.io/api/player/{NICOLAS}/map/{MAPUID1}",
+    ]:
+        try:
+            data = get_json(url)
+            if data:
+                print(json.dumps(data, indent=2)[:1500])
+        except Exception as e:
+            print(f"  -> Erreur : {e}")
+    print("=== TEST 3 : par offset 1000 ===")
+    lb = get_json(f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?length=100&offset=1000")
+    if lb:
+        find_in(lb)
 
 if __name__ == "__main__":
     main()

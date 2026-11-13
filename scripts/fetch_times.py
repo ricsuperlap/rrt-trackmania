@@ -13,26 +13,23 @@ def get_json(url):
     if text.strip().startswith("<"):
         print(f"  -> HTML")
         return None
-    data = json.loads(text)
-    if isinstance(data, dict):
-        print(f"  -> CLES : {list(data.keys())[:15]}")
-    return data
+    return json.loads(text)
 
 def main():
-    for url in [
-        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}/surround/{NICOLAS_ID}",
-        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}/surround/{NICOLAS_ID}?length=10",
-        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?accountId={NICOLAS_ID}",
-        f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?accountIds={NICOLAS_ID}",
-        f"https://trackmania.io/api/player/{NICOLAS_ID}",
-        f"https://trackmania.io/api/players?search=ricsuperlap1",
-    ]:
-        try:
-            data = get_json(url)
-            if data:
-                print(json.dumps(data, indent=2)[:1800])
-        except Exception as e:
-            print(f"  -> Erreur : {e}")
+    for from_time in [25000, 30000, 35000, 40000]:
+        lb = get_json(f"https://trackmania.io/api/leaderboard/map/{MAPUID1}?from={from_time}&length=100")
+        if not lb:
+            continue
+        tops = lb.get("tops") or []
+        print(f"  from={from_time} : {len(tops)} lignes, playercount={lb.get('playercount')}")
+        if tops:
+            print(f"    Premier : position {tops[0].get('position')}, temps {tops[0].get('time')}, nom {(tops[0].get('player') or {}).get('name')}")
+            print(f"    Dernier : position {tops[-1].get('position')}, temps {tops[-1].get('time')}, nom {(tops[-1].get('player') or {}).get('name')}")
+            for e in tops:
+                player = e.get("player") or {}
+                if player.get("id") == NICOLAS_ID:
+                    print(f"    TROUVE ricsuperlap1 ! Position {e.get('position')}, Temps {e.get('time')} ms")
+                    break
 
 if __name__ == "__main__":
     main()

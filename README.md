@@ -18,3 +18,8 @@ Rocket Racing Team — ricsuperlap1, m0ugg, Esyole, Deuxfrai
 32-26-22-19-17-15-13-11-9-7-5-4-3-2-1-0
 1er = 32 pts, 2e = 26, 3e = 22, 4e = 19, 5e = 17, 6e = 15, 7e = 13, 8e = 11, 9e = 9, 10e = 7, 11e = 5, 12e = 4, 13e = 3, 14e = 2, 15e = 1, 16e-20e = 0
 En cas d'égalité de temps : mêmes points, ex-aequo.
+
+
+## V2 AUTO
+- Bouton 'Récupérer les temps Trackmania (auto)' -> appelle /api/refresh.js (Vercel Function) qui lit la campagne actuelle sur trackmania.io et récupère les temps des 6 pilotes.
+- Si l'API trackmania.io change, la saisie manuelle / import CSV reste disponible.

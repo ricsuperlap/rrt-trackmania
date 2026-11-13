@@ -1,0 +1,39 @@
+{
+  "pilots": [
+    "ricsuperlap1",
+    "m0ugg",
+    "Esyole",
+    "Deuxfrai"
+  ],
+  "circuits": [
+    "Circuit 1",
+    "Circuit 2",
+    "Circuit 3",
+    "Circuit 4",
+    "Circuit 5",
+    "Circuit 6",
+    "Circuit 7",
+    "Circuit 8",
+    "Circuit 9",
+    "Circuit 10"
+  ],
+  "bareme": [
+    32,
+    26,
+    22,
+    19,
+    17,
+    15,
+    13,
+    11,
+    9,
+    7,
+    5,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "times": {}
+}

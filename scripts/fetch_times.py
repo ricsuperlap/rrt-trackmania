@@ -23,29 +23,35 @@ def get_json(url):
         return None
     return json.loads(text)
 
+def find_maps(obj, depth=0):
+    if isinstance(obj, dict):
+        print(f"KEYS niveau {depth} : {list(obj.keys())[:20]}")
+        for k, v in obj.items():
+            if isinstance(v, list) and v and isinstance(v[0], dict):
+                first = v[0]
+                if any(x in first for x in ("mapUid", "uid", "map_uid", "mapId", "map")):
+                    print(f"MAPS trouves sous la cle '{k}' : {len(v)} circuits")
+                    return v
+            found = find_maps(v, depth + 1) if depth < 3 else None
+            if found:
+                return found
+    if isinstance(obj, list) and obj and isinstance(obj[0], dict):
+        first = obj[0]
+        if any(x in first for x in ("mapUid", "uid", "map_uid", "mapId")):
+            return obj
+    return None
+
 def main():
-    campaign = None
-    for url in [
-        f"https://trackmania.io/api/campaigns/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/campaign/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/campaign/seasonal/{CAMPAIGN_ID}",
-    ]:
-        try:
-            data = get_json(url)
-            if data:
-                campaign = data
-                print(f"OK campagne trouvee via {url}")
-                break
-        except Exception as e:
-            print(f"FAIL {url} : {e}")
+    url = f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}"
+    campaign = get_json(url)
     if not campaign:
         print("CAMPAGNE INTROUVABLE")
         sys.exit(1)
+    print(f"OK campagne trouvee via {url}")
+    print("DEBUT JSON campagne (2000 premiers caracteres) :")
+    print(json.dumps(campaign, indent=2)[:2000])
 
-    # La campagne peut etre sous "campaign", "maps" ou "playlist"
-    inner = campaign.get("campaign", campaign)
-    maps = inner.get("maps") or inner.get("playlist") or campaign.get("maps") or []
+    maps = find_maps(campaign) or []
     print(f"Nombre de circuits trouves : {len(maps)}")
     maps = maps[:10]
 
@@ -54,29 +60,30 @@ def main():
         result[pid] = [None] * 10
 
     for idx, m in enumerate(maps):
-        uid = m.get("mapUid") or m.get("uid") or m.get("map_uid")
-        name = m.get("name") or m.get("mapName") or f"Circuit {idx+1}"
+        uid = m.get("mapUid") or m.get("uid") or m.get("map_uid") or (m.get("map") or {}).get("uid") if isinstance(m.get("map"), dict) else None
+        if not uid and isinstance(m.get("map"), dict):
+            uid = m["map"].get("mapUid") or m["map"].get("uid")
+        name = m.get("name") or (m.get("map") or {}).get("name") if isinstance(m.get("map"), dict) else m.get("name")
         print(f"Circuit {idx+1} : {name} uid={uid}")
         if not uid:
             continue
         lb = None
-        for url in [
-            f"https://trackmania.io/api/leaderboard/map/{uid}",
-            f"https://trackmania.io/api/leaderboard/map/{uid}?length=10000",
-        ]:
+        for lurl in [f"https://trackmania.io/api/leaderboard/map/{uid}", f"https://trackmania.io/api/leaderboard/map/{uid}?length=10000"]:
             try:
-                data = get_json(url)
+                data = get_json(lurl)
                 if data:
                     lb = data
+                    print(f"Leaderboard {uid} KEYS : {list(lb.keys())[:20] if isinstance(lb, dict) else type(lb)}")
                     break
             except Exception as e:
                 print(f"FAIL leaderboard {uid} : {e}")
         if not lb:
             continue
-        tops = lb.get("tops") or lb.get("leaderboard") or []
+        tops = lb.get("tops") or lb.get("leaderboard") or lb.get("results") or []
+        print(f"Leaderboard {uid} : {len(tops)} lignes")
         for entry in tops:
             player = entry.get("player") or {}
-            acc = player.get("accountId") or entry.get("accountId")
+            acc = player.get("accountId") or entry.get("accountId") or player.get("id")
             if acc in result:
                 t = entry.get("time") or entry.get("score")
                 if t:
@@ -86,7 +93,6 @@ def main():
     with open("times.json", "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
     print("OK times.json ecrit")
-    print(json.dumps(out, indent=2))
 
 if __name__ == "__main__":
     main()

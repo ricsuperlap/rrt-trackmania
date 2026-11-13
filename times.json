@@ -1,6 +1,77 @@
 {
-  "circuits": [],
-  "times": {},
-  "fetchedAt": null,
-  "note": "Genere par GitHub Actions"
+  "campaignId": "157584",
+  "times": {
+    "13eb345e-882a-402e-86f8-16db37d54911": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "07c32c91-3051-40cd-96ed-8e60b8a24c90": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "761bfc7c-484b-42a0-80c2-4612531d83ba": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "761c5673-1518-42fd-8100-f36d0879d618": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "f941396b-3ede-4cc3-88d7-c0893f9a44f0": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "d98837a3-51bc-47d5-88ab-0b2ceec0ae09": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
 }

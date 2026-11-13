@@ -1,16 +1,7 @@
-import json, urllib.request, sys
+import json, urllib.request
 
-CAMPAIGN_ID = "157584"
+UID1 = "28ccb484-72ab-40d5-bb3c-653ca554ceb0"
 NICOLAS = "13eb345e-882a-402e-86f8-16db37d54911"
-
-PLAYERS = {
-    "13eb345e-882a-402e-86f8-16db37d54911": "Nicolas",
-    "07c32c91-3051-40cd-96ed-8e60b8a24c90": "Mathy",
-    "761bfc7c-484b-42a0-80c2-4612531d83ba": "m0ugg",
-    "761c5673-1518-42fd-8100-f36d0879d618": "Deuxfrai",
-    "f941396b-3ede-4cc3-88d7-c0893f9a44f0": "Strakiste",
-    "d98837a3-51bc-47d5-88ab-0b2ceec0ae09": "Esyole",
-}
 
 HEADERS = {"User-Agent": "RRT-Trackmania-Bot/1.0", "Accept": "application/json"}
 
@@ -30,26 +21,21 @@ def get_json(url):
     return data
 
 def main():
-    candidates = [
-        f"https://trackmania.io/api/player/{NICOLAS}/campaign/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/player/{NICOLAS}/campaigns/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/players/{NICOLAS}/campaign/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/player/{NICOLAS}/records",
-        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}/player/{NICOLAS}",
-        f"https://trackmania.io/api/leaderboard/campaign/{CAMPAIGN_ID}/player/{NICOLAS}",
-        f"https://trackmania.io/api/player/{NICOLAS}/campaigns/seasonal/{CAMPAIGN_ID}",
-        f"https://trackmania.io/api/player/{NICOLAS}/campaigngroups/{CAMPAIGN_ID}",
-    ]
-    for url in candidates:
+    for url in [
+        f"https://trackmania.io/api/leaderboard/map/{UID1}",
+        f"https://trackmania.io/api/leaderboard/map/{UID1}?length=100",
+        f"https://trackmania.io/api/maps/{UID1}",
+        f"https://trackmania.io/api/map/{UID1}",
+    ]:
         try:
             data = get_json(url)
             if not data:
                 continue
             print("  DEBUT JSON :")
-            print(json.dumps(data, indent=2)[:1500])
+            print(json.dumps(data, indent=2)[:2000])
         except Exception as e:
             print(f"  -> Erreur : {e}")
-    print("FIN TESTS JOUEUR")
+    print("FIN TEST CIRCUIT 1")
 
 if __name__ == "__main__":
     main()

@@ -1,48 +1,92 @@
+import json, urllib.request, sys
 
-import json, urllib.request, time, sys
-UA = "ricsuperlap1 | RRT-Trackmania-Classement | GitHub-Actions-Bot"
-def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json", "Referer": "https://trackmania.io/"})
+CAMPAIGN_ID = "157584"
+
+PLAYERS = {
+    "13eb345e-882a-402e-86f8-16db37d54911": "Nicolas",
+    "07c32c91-3051-40cd-96ed-8e60b8a24c90": "Mathy",
+    "761bfc7c-484b-42a0-80c2-4612531d83ba": "m0ugg",
+    "761c5673-1518-42fd-8100-f36d0879d618": "Deuxfrai",
+    "f941396b-3ede-4cc3-88d7-c0893f9a44f0": "Strakiste",
+    "d98837a3-51bc-47d5-88ab-0b2ceec0ae09": "Esyole",
+}
+
+HEADERS = {"User-Agent": "RRT-Trackmania-Bot/1.0", "Accept": "application/json"}
+
+def get_json(url):
+    print(f"GET {url}")
+    req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as r:
-        txt = r.read().decode()
-        if txt.strip().startswith("<"):
-            raise Exception("HTML returned for "+url+" : "+txt[:200])
-        return json.loads(txt)
-pilots = json.loads(open("data.json").read())["pilots"]
-ids = {p["id"]: p["display"] for p in pilots}
-camp = None
-for u in ["https://trackmania.io/api/campaigns/0","https://trackmania.io/api/campaign/0","https://trackmania.io/api/campaigns"]:
-    try:
-        camp = get(u); print("OK campaign", u); break
-    except Exception as e:
-        print("FAIL", u, e)
-if not camp:
-    print("CAMPAGNE INTROUVABLE"); sys.exit(1)
-pl = camp.get("campaign",{}).get("playlist") or camp.get("playlist") or camp.get("campaigns",[{}])[0].get("playlist") or []
-if not pl and isinstance(camp.get("campaigns"), list):
-    for c in camp["campaigns"]:
-        if c.get("playlist"): pl=c["playlist"]; break
-pl = pl[:10]
-circuits=[]; times={}
-for ci,item in enumerate(pl):
-    m=item.get("map") or item
-    name=(m.get("name") or "").replace("$","")
-    circuits.append(name or f"Circuit {ci+1}")
-    times[str(ci)]={}
-    mapUid=m.get("mapUid") or m.get("uid") or item.get("mapUid")
-    lbUid=item.get("leaderboarduid") or item.get("leaderboardUid") or m.get("leaderboarduid")
-    if not mapUid or not lbUid: continue
-    try:
-        lb=get(f"https://trackmania.io/api/leaderboard/{lbUid}/{mapUid}")
-        for t in lb.get("tops",[]):
-            pid=(t.get("player") or {}).get("id")
-            if pid in ids:
-                ms=t["time"]; s=ms//1000; milli=ms%1000; mn=s//60
-                times[str(ci)][ids[pid]]=f"{mn}:{s%60:02d}.{milli:03d}"
-        print(f"OK circuit {ci+1} {name} -> {times[str(ci)]}")
-    except Exception as e:
-        print("FAIL leaderboard", ci, e)
-    time.sleep(0.5)
-out={"circuits":circuits,"times":times,"fetchedAt":time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),"source":"trackmania.io via GitHub Actions"}
-open("times.json","w").write_text(json.dumps(out, ensure_ascii=False, indent=2))
-print("WROTE times.json")
+        text = r.read().decode("utf-8", errors="ignore")
+    if text.strip().startswith("<"):
+        print(f"FAIL {url} HTML returned")
+        return None
+    return json.loads(text)
+
+def main():
+    campaign = None
+    for url in [
+        f"https://trackmania.io/api/campaigns/{CAMPAIGN_ID}",
+        f"https://trackmania.io/api/campaign/{CAMPAIGN_ID}",
+        f"https://trackmania.io/api/campaigns/seasonal/{CAMPAIGN_ID}",
+        f"https://trackmania.io/api/campaign/seasonal/{CAMPAIGN_ID}",
+    ]:
+        try:
+            data = get_json(url)
+            if data:
+                campaign = data
+                print(f"OK campagne trouvee via {url}")
+                break
+        except Exception as e:
+            print(f"FAIL {url} : {e}")
+    if not campaign:
+        print("CAMPAGNE INTROUVABLE")
+        sys.exit(1)
+
+    # La campagne peut etre sous "campaign", "maps" ou "playlist"
+    inner = campaign.get("campaign", campaign)
+    maps = inner.get("maps") or inner.get("playlist") or campaign.get("maps") or []
+    print(f"Nombre de circuits trouves : {len(maps)}")
+    maps = maps[:10]
+
+    result = {}
+    for pid in PLAYERS:
+        result[pid] = [None] * 10
+
+    for idx, m in enumerate(maps):
+        uid = m.get("mapUid") or m.get("uid") or m.get("map_uid")
+        name = m.get("name") or m.get("mapName") or f"Circuit {idx+1}"
+        print(f"Circuit {idx+1} : {name} uid={uid}")
+        if not uid:
+            continue
+        lb = None
+        for url in [
+            f"https://trackmania.io/api/leaderboard/map/{uid}",
+            f"https://trackmania.io/api/leaderboard/map/{uid}?length=10000",
+        ]:
+            try:
+                data = get_json(url)
+                if data:
+                    lb = data
+                    break
+            except Exception as e:
+                print(f"FAIL leaderboard {uid} : {e}")
+        if not lb:
+            continue
+        tops = lb.get("tops") or lb.get("leaderboard") or []
+        for entry in tops:
+            player = entry.get("player") or {}
+            acc = player.get("accountId") or entry.get("accountId")
+            if acc in result:
+                t = entry.get("time") or entry.get("score")
+                if t:
+                    result[acc][idx] = int(t)
+
+    out = {"campaignId": CAMPAIGN_ID, "times": result}
+    with open("times.json", "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2)
+    print("OK times.json ecrit")
+    print(json.dumps(out, indent=2))
+
+if __name__ == "__main__":
+    main()

@@ -26,45 +26,18 @@ document.getElementById('importCsv').onclick=()=>{let lines=document.getElementB
 document.getElementById('exportCsv').onclick=()=>{let out=['circuit,pilote,temps'];DB.circuits.forEach((c,ci)=>DB.pilots.map(P).forEach(p=>{let t=(DB.times[ci]||{})[p];if(t)out.push(`${String(ci+1).padStart(2,'0')},${p},${t}`)}));let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out.join('\n')],{type:'text/csv'}));a.download='rrt-temps.csv';a.click();};
 document.getElementById('copyDiscord').onclick=()=>{let totals={};DB.pilots.map(P).forEach(p=>totals[p]=0);DB.circuits.forEach((c,ci)=>{let {pts}=circuitResults(ci);Object.keys(pts).forEach(p=>totals[p]+=pts[p]);});let order=DB.pilots.map(P).sort((a,b)=>totals[b]-totals[a]);let txt='🏆 **RRT — CLASSEMENT TRACKMANIA**\n'+order.map((p,i)=>`${['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'][i]||''} ${p} — **${totals[p]} pts**`).join('\n');navigator.clipboard.writeText(txt).then(()=>alert('Copié pour Discord ✅'));};
 document.getElementById('reset').onclick=()=>{if(confirm('Reset tous les temps ?')){DB.times={};save();}};
-
-const autoBtn=document.getElementById('autoBtn'); if(autoBtn){ autoBtn.onclick=async()=>{ const st=document.getElementById('autoStatus'); st.textContent='⏳ Récupération directe sur trackmania.io depuis ton navigateur...'; autoBtn.disabled=true;
-  const PILOTS = DB.pilots.map(p=>({display:typeof p==='string'?p:p.display, id:typeof p==='string'?'':p.id})).filter(p=>p.id);
-  const IDS = new Set(PILOTS.map(p=>p.id));
-  async function fetchJsonDirect(url){
-    // 1) direct (navigateur de l'utilisateur, IP résidentielle, pas bloquée comme Vercel)
-    try{ const r=await fetch(url,{headers:{'Accept':'application/json'}}); const t=await r.text(); if(t.trim().startsWith('<')) throw new Error('HTML'); return JSON.parse(t); }catch(e1){
-      // 2) via proxy CORS public
-      try{ const r2=await fetch('https://corsproxy.io/?url='+encodeURIComponent(url)); const t2=await r2.text(); if(t2.trim().startsWith('<')) throw new Error('HTML proxy'); return JSON.parse(t2); }catch(e2){ throw new Error('Direct: '+e1.message+' | Proxy: '+e2.message); }
+const autoBtn=document.getElementById('autoBtn'); if(autoBtn){ autoBtn.onclick=async()=>{ const st=document.getElementById('autoStatus'); st.textContent='⏳ Récupération sur trackmania.io...'; autoBtn.disabled=true; try{ const r=await fetch('/api/refresh'); const j=await r.json(); if(!j.ok) throw new Error(j.error||'Erreur API'); if(j.circuits && j.circuits.length) DB.circuits=j.circuits.slice(0,10); DB.times=j.times||{}; save(); sel.innerHTML=DB.circuits.map((c,i)=>`<option value="${i}">${c}</option>`).join(''); drawForm(); st.textContent='✅ Temps récupérés ! Dernière synchro : '+new Date(j.fetchedAt).toLocaleString('fr-FR'); }catch(e){ st.textContent='❌ '+e.message; } autoBtn.disabled=false; }; }
+}  async function fetchJsonDirect(url){
+    const parseOrThrow=(t,src)=>{ if(!t||!t.trim()) throw new Error(src+' vide'); if(t.trim().startsWith('<')) throw new Error(src+' a renvoyé du HTML'); let j; try{ j=JSON.parse(t); }catch(e){ throw new Error(src+' JSON invalide : '+t.slice(0,150)); } if(j && j.error) throw new Error(src+' erreur : '+JSON.stringify(j).slice(0,200)); if(j && j.contents){ // allorigins /get renvoie {contents:"..."}
+        try{ const inner=JSON.parse(j.contents); if(inner && inner.error) throw new Error(src+' erreur inner'); return inner; }catch(e){ throw e; } }
+      return j; };
+    // 1) direct
+    try{ const r=await fetch(url,{headers:{'Accept':'application/json'}}); const t=await r.text(); return parseOrThrow(t,'Direct'); }catch(e1){
+      // 2) allorigins raw (gratuit, sans clé)
+      try{ const r2=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url)); const t2=await r2.text(); return parseOrThrow(t2,'AllOrigins-raw'); }catch(e2){
+        // 3) allorigins get
+        try{ const r3=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url)); const t3=await r3.text(); return parseOrThrow(t3,'AllOrigins-get'); }catch(e3){ throw new Error('Direct: '+e1.message+' | AllOrigins-raw: '+e2.message+' | AllOrigins-get: '+e3.message); }
+      }
     }
   }
-  try{
-    let camp=null, errs=[];
-    for(const u of ['https://trackmania.io/api/campaigns/0','https://trackmania.io/api/campaign/0','https://trackmania.io/api/campaigns','https://trackmania.io/api/campaigns/1']){
-      try{ camp=await fetchJsonDirect(u); if(camp) break; }catch(e){ errs.push(u+' -> '+e.message); }
-    }
-    if(!camp) throw new Error('Campagne introuvable. '+errs.join(' | '));
-    let playlist = camp?.campaign?.playlist || camp?.playlist || camp?.campaigns?.[0]?.playlist || camp?.[0]?.playlist || [];
-    if(!playlist.length && Array.isArray(camp.campaigns)){ for(const c of camp.campaigns){ if(c.playlist?.length){ playlist=c.playlist; break; } } }
-    if(!playlist.length) throw new Error('Campagne trouvée mais playlist vide. Reçu : '+JSON.stringify(camp).slice(0,400));
-    playlist = playlist.slice(0,10);
-    const circuits=[]; const times={};
-    for(let ci=0; ci<playlist.length; ci++){
-      const item=playlist[ci]; const map=item.map||item;
-      const mapUid=map.mapUid||map.uid||item.mapUid;
-      const lbUid=item.leaderboarduid||item.leaderboardUid||map.leaderboarduid;
-      const name=((map.name||'').replace(/\$[0-9a-fA-F]{3}/g,'').replace(/\$/g,'')) || ('Circuit '+(ci+1));
-      circuits.push(name); times[ci]={};
-      if(!mapUid||!lbUid) continue;
-      try{
-        const lb=await fetchJsonDirect(`https://trackmania.io/api/leaderboard/${lbUid}/${mapUid}`);
-        const tops=lb.tops||lb.top||[];
-        for(const t of tops){ const pid=t.player?.id; if(IDS.has(pid)){ const pilot=PILOTS.find(p=>p.id===pid); const ms=t.time; const s=Math.floor(ms/1000), milli=ms%1000, min=Math.floor(s/60); times[ci][pilot.display]=`${min}:${String(s%60).padStart(2,'0')}.${String(milli).padStart(3,'0')}`; } }
-      }catch(e){ /* on continue, circuit sans temps */ }
-      st.textContent=`⏳ ${ci+1}/10 circuits... (${name})`;
-    }
-    if(circuits.length) DB.circuits=circuits.slice(0,10);
-    DB.times=times; save(); sel.innerHTML=DB.circuits.map((c,i)=>`<option value="${i}">${c}</option>`).join(''); drawForm();
-    st.textContent='✅ Temps récupérés ! Dernière synchro : '+new Date().toLocaleString('fr-FR');
-  }catch(e){ st.textContent='❌ '+e.message; console.log('RRT auto error', e); }
-  autoBtn.disabled=false; }; }
-}
+

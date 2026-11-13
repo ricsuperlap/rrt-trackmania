@@ -1,6 +1,6 @@
 
 export default async function handler(req,res){
-  const UA='RRT-Trackmania-Classement/1.0 (contact: rrt-trackmania.vercel.app)';
+  const UA='ricsuperlap1 | RRT-Trackmania-Classement | via RRT';
   const pilots=[
     {display:"[CORT] Nicolas Richard",pseudo:"ricsuperlap1",id:"13eb345e-882a-402e-86f8-16db37d54911"},
     {display:"mathYeuu2.0",pseudo:"Mathy6hj",id:"07c32c91-3051-40cd-96ed-8e60b8a24c90"},
@@ -10,36 +10,52 @@ export default async function handler(req,res){
     {display:"Esyole",pseudo:"Esyole",id:"d98837a3-51bc-47d5-88ab-0b2ceec0ae09"},
   ];
   const ids=new Set(pilots.map(p=>p.id));
-  async function get(url){ const r=await fetch(url,{headers:{'User-Agent':UA}}); if(!r.ok) throw new Error(url+' -> '+r.status); return r.json(); }
+  async function getJson(url){
+    const r=await fetch(url,{headers:{'User-Agent':UA,'Accept':'application/json','Referer':'https://trackmania.io/'}});
+    const txt=await r.text();
+    if(!r.ok) throw new Error(url+' -> HTTP '+r.status+' : '+txt.slice(0,200));
+    if(txt.trim().startsWith('<')) throw new Error(url+' -> a renvoyé du HTML (bloqué / Cloudflare) : '+txt.slice(0,200));
+    try{ return JSON.parse(txt); }catch(e){ throw new Error(url+' -> JSON invalide : '+txt.slice(0,200)); }
+  }
+  const candidates=[
+    'https://trackmania.io/api/campaigns/0',
+    'https://trackmania.io/api/campaign/0',
+    'https://trackmania.io/api/campaigns',
+    'https://trackmania.io/api/campaigns/1',
+    'https://trackmania.io/api/campaign/1',
+  ];
   try{
-    let camp=null, campErr=null;
-    for(const u of ['https://trackmania.io/api/campaigns/0','https://trackmania.io/api/campaign/0']){
-      try{ camp=await get(u); break; }catch(e){ campErr=e.message; }
+    let camp=null, errors=[];
+    for(const u of candidates){
+      try{ camp=await getJson(u); if(camp) break; }catch(e){ errors.push(e.message); }
     }
-    if(!camp) throw new Error('Campagne introuvable: '+campErr);
-    // camp shape: {campaign:{playlist:[{map:{mapUid,name,mapId}, leaderboarduid}]}} or {playlist:[...]} or array
-    let playlist = camp?.campaign?.playlist || camp?.playlist || camp?.campaigns?.[0]?.playlist || [];
-    if(!playlist.length && Array.isArray(camp)) playlist = camp[0]?.playlist || [];
+    if(!camp) return res.status(500).json({ok:false, error:'Campagne introuvable. Essais : '+errors.join(' | ')});
+    let playlist = camp?.campaign?.playlist || camp?.playlist || camp?.campaigns?.[0]?.playlist || camp?.[0]?.playlist || camp?.campaigns?.[0]?.campaign?.playlist || [];
+    // Some shapes: {campaigns:[{playlist:[...]}]} or {campaign:{playlist}}
+    if(!playlist.length && camp.campaigns && Array.isArray(camp.campaigns)){
+      // find seasonal campaign (first with playlist)
+      for(const c of camp.campaigns){ if(c.playlist?.length){ playlist=c.playlist; break; } }
+    }
+    if(!playlist.length) return res.status(500).json({ok:false, error:'Campagne trouvée mais playlist vide. Forme reçue : '+JSON.stringify(camp).slice(0,500), debug:errors});
     playlist = playlist.slice(0,10);
     const circuits=[]; const times={}; const debug=[];
     for(let ci=0; ci<playlist.length; ci++){
       const item=playlist[ci];
       const map=item.map||item;
       const mapUid=map.mapUid||map.uid||item.mapUid;
-      const lbUid=item.leaderboarduid||item.leaderboardUid||map.leaderboarduid;
-      const name=map.name||('Circuit '+(ci+1));
+      const lbUid=item.leaderboarduid||item.leaderboardUid||map.leaderboarduid||item.leaderboardUid;
+      const name=(map.name||'').replace(/\$[0-9a-fA-F]{3}/g,'').replace(/\$/g,'') || ('Circuit '+(ci+1));
       circuits.push(name);
       times[ci]={};
-      if(!mapUid||!lbUid){ debug.push({ci,name,err:'no mapUid/lbUid'}); continue; }
+      if(!mapUid||!lbUid){ debug.push({ci,name,err:'no mapUid/lbUid',item:Object.keys(item||{})}); continue; }
       try{
-        const lb=await get(`https://trackmania.io/api/leaderboard/${lbUid}/${mapUid}`);
+        const lb=await getJson(`https://trackmania.io/api/leaderboard/${lbUid}/${mapUid}`);
         const tops=lb.tops||lb.top||[];
         for(const t of tops){
           const pid=t.player?.id||t.player?.accountId;
           if(ids.has(pid)){
             const pilot=pilots.find(p=>p.id===pid);
             const ms=t.time;
-            // format ms -> m:ss.mmm
             const s=Math.floor(ms/1000), milli=ms%1000, min=Math.floor(s/60);
             times[ci][pilot.display]=`${min}:${String(s%60).padStart(2,'0')}.${String(milli).padStart(3,'0')}`;
           }

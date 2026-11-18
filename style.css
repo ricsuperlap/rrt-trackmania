@@ -29,3 +29,31 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
 
 .del-pilot{background:#c0392b;color:#fff;border:0;border-radius:6px;padding:6px 9px;cursor:pointer;font-weight:bold}
 #addPlayerBtn{background:#2ecc71;color:#fff}
+
+/* --- Version mobile --- */
+@media(max-width:700px){
+  header{flex-wrap:wrap;padding:12px 12px}
+  .logo-img{width:48px;height:48px}
+  h1{font-size:17px;line-height:1.2}
+  header p{font-size:11px}
+  .edit-btn{margin-left:0;width:100%;padding:12px;font-size:15px}
+  main{padding:10px 8px}
+  .card{padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .card table{min-width:720px}
+  th,td{font-size:12px;padding:7px 3px}
+  td.total{font-size:15px}
+  th.pilot,td.pilot{position:sticky;left:0;background:#111c33;z-index:2;min-width:110px;max-width:110px}
+  th.total,td.total{position:sticky;right:0;z-index:2}
+  .actions button{flex:1 1 40%;padding:12px 8px;font-size:13px}
+  .editor{padding:10px 8px}
+  .edit-table{display:block;overflow-x:auto}
+  .edit-table input{font-size:14px;padding:9px 4px;min-width:58px}
+  .edit-table input.name{min-width:110px}
+  .actions{flex-direction:column;align-items:stretch}
+  .actions button{width:100%}
+  #addPlayerBtn{width:100%}
+}
+@media(max-width:400px){
+  .card table{min-width:680px}
+  h1{font-size:16px}
+}

@@ -69,3 +69,5 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
 .quick-row{display:flex;gap:8px;flex-wrap:wrap}.quick-row select,.quick-row input{flex:1;min-width:120px;background:#111c33;color:#fff;border:1px solid #34406a;border-radius:8px;padding:12px;font-size:15px}
 .editor-meta{margin-bottom:10px}
 @media(max-width:700px){.banner{margin:10px 8px 0;font-size:12px}.tabs{padding:10px 8px 0}.tab{flex:1;padding:10px 6px;font-size:12px}.quick-row{flex-direction:column}.quick-row select,.quick-row input,.quick-row button{width:100%}}
+
+td.pts-only{font-size:15px;font-weight:bold} td.pts-only b{font-size:16px}

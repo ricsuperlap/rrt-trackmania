@@ -11,16 +11,16 @@
   <div class="logo">🚀</div>
   <div>
     <h1>RRT - Rocket Racing Team</h1>
-    <p>Fall 2026 - 10 premiers circuits gratuits &middot; <span id="updated">Classement RRT</span></p>
+    <p>Fall 2026 - 10 premiers circuits gratuits &middot; Classement RRT</p>
   </div>
+  <button id="toggleEdit" class="edit-btn">✏️ Modifier les temps</button>
 </header>
 <main>
   <div class="card">
     <table id="board">
       <thead>
         <tr>
-          <th class="rank">#</th>
-          <th class="pilot">Pilote</th>
+          <th class="rank">#</th><th class="pilot">Pilote</th>
           <th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th>
           <th>C6</th><th>C7</th><th>C8</th><th>C9</th><th>C10</th>
           <th class="total">Total</th>
@@ -32,7 +32,20 @@
   </div>
   <div class="actions">
     <button id="copyDiscord">Copier pour Discord</button>
+    <button id="downloadJson" class="secondary">⬇️ Télécharger times.json (pour partager)</button>
     <span id="copyMsg"></span>
+  </div>
+  <div id="editor" class="card editor hidden">
+    <h2>✏️ Saisir les temps</h2>
+    <p class="help">Tape les noms des joueurs et leurs chronos comme dans le jeu : <b>0:20.168</b> ou <b>20.168</b>. Laisse vide si le circuit n'est pas fait. Puis <b>Enregistrer</b>.</p>
+    <div id="editGrid"></div>
+    <div class="actions">
+      <button id="saveEdit">✅ Enregistrer</button>
+      <button id="cancelEdit" class="secondary">Annuler</button>
+      <button id="resetEdit" class="danger">Effacer tout</button>
+    </div>
+    <p id="saveMsg" class="save-msg"></p>
+    <p class="help">⚠️ <b>Important :</b> Enregistrer, ça change le tableau <b>sur ton écran</b> tout de suite, pour ta capture Discord. Pour que les copains voient la même chose sur le site, clique sur <b>⬇️ Télécharger times.json</b>, puis mets ce fichier sur GitHub à la place de l'ancien <b>times.json</b>.</p>
   </div>
 </main>
 <script src="app.js"></script>

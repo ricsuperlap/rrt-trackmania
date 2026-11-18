@@ -2,21 +2,24 @@
 *{box-sizing:border-box} body{margin:0;background:#0b1220;color:#fff;font-family:Arial,Helvetica,sans-serif}
 header{display:flex;gap:14px;align-items:center;padding:14px 20px;background:#111c33;border-bottom:3px solid #ffcc00}
 .logo{font-size:34px} h1{margin:0;font-size:22px} header p{margin:4px 0 0;color:#b9c4da;font-size:13px}
+.edit-btn{margin-left:auto;background:#ffcc00;border:0;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer}
 main{padding:14px 18px;max-width:1280px;margin:0 auto}
-.card{background:#111c33;border-radius:10px;padding:12px;overflow:hidden}
+.card{background:#111c33;border-radius:10px;padding:12px;overflow:hidden;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
 th,td{padding:8px 4px;text-align:center;border-bottom:1px solid #263356;font-size:13px}
-th{background:#1a2a4d;color:#ffd84d;font-size:12px;letter-spacing:.3px}
+th{background:#1a2a4d;color:#ffd84d;font-size:12px}
 th.pilot,td.pilot{text-align:left;width:20%}
 th.rank{width:32px} th.total{width:64px;background:#ffcc00;color:#111}
 td.pilot{font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-td .time{display:block;font-weight:bold;font-size:13px}
-td .pts{display:block;color:#ffd84d;font-size:11px;margin-top:2px}
-td.total{font-weight:bold;font-size:17px;background:#1e335e}
-td.empty{color:#5d6b8a}
+td .time{display:block;font-weight:bold} td .pts{display:block;color:#ffd84d;font-size:11px;margin-top:2px}
+td.total{font-weight:bold;font-size:17px;background:#1e335e} td.empty{color:#5d6b8a}
 tr.leader td.pilot::before{content:"👑 "}
-.actions{margin-top:12px;display:flex;gap:10px;align-items:center}
+.actions{margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 button{background:#ffcc00;border:0;padding:9px 14px;border-radius:8px;font-weight:bold;cursor:pointer}
-#copyMsg{color:#9fe6a0;font-size:13px}
-.legend{color:#8b98b5;font-size:12px;margin:10px 0 0}
+button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b;color:#fff}
+#copyMsg{color:#9fe6a0;font-size:13px} .legend{color:#8b98b5;font-size:12px;margin:10px 0 0}
+.hidden{display:none} .editor h2{margin:4px 0} .help{color:#b9c4da;font-size:13px}
+.edit-table{width:100%;border-collapse:collapse} .edit-table th{font-size:11px} .edit-table td{padding:4px 2px}
+.edit-table input{width:100%;padding:7px 4px;border-radius:6px;border:1px solid #34406a;background:#0b1220;color:#fff;text-align:center;font-size:12px}
+.edit-table input.name{text-align:left;font-weight:bold} .save-msg{color:#9fe6a0;font-weight:bold}
 @media(max-width:800px){th,td{font-size:11px;padding:6px 2px} h1{font-size:18px}}

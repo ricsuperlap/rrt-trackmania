@@ -96,7 +96,14 @@ function saveEditor(){
   PILOTS=keep.length?keep:newPilots; TIMES=cleaned; saveLocal(); render();
   document.getElementById('saveMsg').textContent='✅ Enregistré ! Le classement est à jour. Pense à télécharger times.json pour partager sur GitHub.';
 }
-document.getElementById('toggleEdit').onclick=()=>{let ed=document.getElementById('editor'); if(ed.classList.contains('hidden')) openEditor(); else ed.classList.add('hidden');};
+document.getElementById('toggleEdit').onclick=()=>{
+  let ed=document.getElementById('editor');
+  if(!ed.classList.contains('hidden')){ ed.classList.add('hidden'); return; }
+  let code=prompt('🔐 Code pour modifier les temps :');
+  if(code===null) return;
+  if(code.trim()!=='9645'){ alert('❌ Mauvais code.'); return; }
+  openEditor();
+};
 document.getElementById('saveEdit').onclick=saveEditor;
 document.getElementById('addPlayerBtn').onclick=()=>{
   // on sauvegarde d'abord ce qui est tapé, pour ne pas perdre

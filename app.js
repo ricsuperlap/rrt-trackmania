@@ -73,8 +73,8 @@ function switchTab(tab){
 function render(){
   let per=compute();
   document.getElementById('rows').innerHTML=per.map((p,idx)=>{
-    let cells=p.cells.map(c=> c.ms==null?'<td class="empty">—</td>':'<td class="pts-only" title="'+fmt(c.ms)+'"><b>'+c.pts+'</b></td>').join('');
-    return '<tr class="'+(idx===0?'leader':'')+'"><td>'+(idx+1)+'</td><td class="pilot">'+p.name+'</td>'+cells+'<td class="total">'+p.total+'</td></tr>';
+    let cells=p.cells.map(c=> c.ms==null?'<td class="empty">—</td>':'<td><span class="time">'+fmt(c.ms)+'</span><span class="pts">'+c.pts+' pts</span></td>').join('');
+    return '<tr class="'+(idx===0?'leader':'')+'"><td>'+(idx+1)+'</td><td class="pilot">'+p.name+'</td><td class="total">'+p.total+'</td>'+cells+'</tr>';
   }).join('');
   return per;
 }

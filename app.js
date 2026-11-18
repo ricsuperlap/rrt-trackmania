@@ -18,7 +18,7 @@ function saveLocal(){
 async function load(){
   let fromLocal=loadLocal();
   if(!fromLocal){
-    try{let r=await fetch('times.json');let j=await r.json();TIMES=j.times||j||[];}catch(e){TIMES=[];}
+    try{let r=await fetch('times.json');let j=await r.json();TIMES=j.times||j||[]; if(j.pilots && Array.isArray(j.pilots) && j.pilots.length) PILOTS=j.pilots;}catch(e){TIMES=[];}
     while(TIMES.length<10) TIMES.push({});
   }
   render();
@@ -49,17 +49,28 @@ function openEditor(){
   let ed=document.getElementById('editor'); ed.classList.remove('hidden');
   let html='<table class="edit-table"><thead><tr><th>Pilote</th>';
   for(let i=1;i<=10;i++) html+='<th>C'+i+'</th>';
-  html+='</tr></thead><tbody>';
+  html+='<th>Suppr.</th></tr></thead><tbody>';
   PILOTS.forEach((name,pi)=>{
     html+='<tr><td><input class="name" data-p="'+pi+'" value="'+name.replace(/"/g,'&quot;')+'"></td>';
     for(let ci=0;ci<10;ci++){
       let v=(TIMES[ci]||{})[name]||'';
       html+='<td><input data-ci="'+ci+'" data-p="'+pi+'" value="'+v+'" placeholder="—"></td>';
     }
-    html+='</tr>';
+    html+='<td><button type="button" class="del-pilot" data-p="'+pi+'">✕</button></td></tr>';
   });
   html+='</tbody></table>';
   document.getElementById('editGrid').innerHTML=html;
+  document.querySelectorAll('.del-pilot').forEach(b=>{
+    b.onclick=()=>{
+      let pi=parseInt(b.dataset.p);
+      let name=PILOTS[pi];
+      if(!confirm('Supprimer '+name+' ?')) return;
+      PILOTS.splice(pi,1);
+      // on enlève ses temps aussi
+      TIMES.forEach(t=>{delete t[name];});
+      saveLocal(); render(); openEditor();
+    };
+  });
   ed.scrollIntoView({behavior:'smooth'});
 }
 function saveEditor(){
@@ -72,11 +83,31 @@ function saveEditor(){
     newTimes[ci][newPilots[pi]]=v;
   });
   // si un nom a changé, on garde les temps sous le nouveau nom (déjà fait ci-dessus)
-  PILOTS=newPilots; TIMES=newTimes; saveLocal(); render();
+  // on enlève les lignes avec un nom vide
+  let keep=[]; let remap={};
+  newPilots.forEach((n,idx)=>{ if(n.trim()){ remap[idx]=keep.length; keep.push(n); } });
+  let cleaned=[]; for(let ci=0;ci<10;ci++){ cleaned.push({}); }
+  Object.keys(newTimes).forEach(ci=>{
+    Object.entries(newTimes[ci]).forEach(([nm,v])=>{
+      let oldIdx=newPilots.indexOf(nm);
+      if(oldIdx in remap) cleaned[ci][keep[remap[oldIdx]]]=v;
+    });
+  });
+  PILOTS=keep.length?keep:newPilots; TIMES=cleaned; saveLocal(); render();
   document.getElementById('saveMsg').textContent='✅ Enregistré ! Le classement est à jour. Pense à télécharger times.json pour partager sur GitHub.';
 }
 document.getElementById('toggleEdit').onclick=()=>{let ed=document.getElementById('editor'); if(ed.classList.contains('hidden')) openEditor(); else ed.classList.add('hidden');};
 document.getElementById('saveEdit').onclick=saveEditor;
+document.getElementById('addPlayerBtn').onclick=()=>{
+  // on sauvegarde d'abord ce qui est tapé, pour ne pas perdre
+  try{ saveEditor(); }catch(e){}
+  document.getElementById('saveMsg').textContent='';
+  PILOTS.push('Nouveau pilote');
+  saveLocal(); render(); openEditor();
+  // on met le curseur sur le nouveau nom
+  let inputs=document.querySelectorAll('input.name');
+  let last=inputs[inputs.length-1]; if(last){ last.focus(); last.select(); }
+};
 document.getElementById('cancelEdit').onclick=()=>{document.getElementById('editor').classList.add('hidden');};
 document.getElementById('resetEdit').onclick=()=>{if(!confirm('Effacer tous les temps ?')) return; TIMES=[]; for(let i=0;i<10;i++) TIMES.push({}); saveLocal(); render(); openEditor();};
 document.getElementById('copyDiscord').onclick=async()=>{
@@ -86,7 +117,7 @@ document.getElementById('copyDiscord').onclick=async()=>{
   try{await navigator.clipboard.writeText(txt);document.getElementById('copyMsg').textContent='Copié ! Colle dans Discord.';}catch(e){prompt('Copie ce texte :',txt);}
 };
 document.getElementById('downloadJson').onclick=()=>{
-  let data=JSON.stringify({times:TIMES},null,2);
+  let data=JSON.stringify({pilots:PILOTS, times:TIMES},null,2);
   let blob=new Blob([data],{type:'application/json'});
   let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='times.json'; a.click();
 };

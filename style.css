@@ -26,3 +26,6 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
 
 .logo-img{width:72px;height:72px;object-fit:cover;border-radius:50%;border:3px solid #ffcc00;flex-shrink:0}
 @media(max-width:800px){.logo-img{width:56px;height:56px}}
+
+.del-pilot{background:#c0392b;color:#fff;border:0;border-radius:6px;padding:6px 9px;cursor:pointer;font-weight:bold}
+#addPlayerBtn{background:#2ecc71;color:#fff}

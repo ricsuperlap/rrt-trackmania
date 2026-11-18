@@ -15,8 +15,13 @@
   </div>
   <button id="toggleEdit" class="edit-btn">✏️ Modifier les temps</button>
 </header>
+<div class="banner">🏁 Circuit en cours : <b id="bannerCircuit">Circuit 7</b> &nbsp;·&nbsp; ⏰ Clôture des chronos : <b>Dimanche 20h00</b></div>
+<nav class="tabs">
+<button class="tab active" data-tab="general">🏆 Général</button>
+<button class="tab" data-tab="circuit">⏱️ Circuit en cours</button>
+</nav>
 <main>
-  <div class="card">
+  <div class="card" id="view-general">
     <table id="board">
       <thead>
         <tr>
@@ -30,7 +35,16 @@
     </table>
     <p class="legend">Dans chaque case : le temps, puis les points. <b>—</b> = circuit pas encore fait. Bar&egrave;me : 32 - 26 - 22 - 19 - 17 - 15 - 13 - 11 - 9 - 7 - 5 - 4 - 3 - 2 - 1 - 0</p>
   </div>
-  <div class="actions">
+  
+<div class="card hidden" id="view-circuit">
+<h2>⏱️ Circuit en cours - Circuit <span id="circuitTitle">7</span></h2>
+<p class="help">Classement de ce circuit seul. Parfait pour ta capture Discord dès qu un chrono arrive.</p>
+<div class="circuit-picker"><label>Choisir le circuit :</label><select id="circuitSelect"><option value="0">Circuit 1</option><option value="1">Circuit 2</option><option value="2">Circuit 3</option><option value="3">Circuit 4</option><option value="4">Circuit 5</option><option value="5">Circuit 6</option><option value="6" selected>Circuit 7</option><option value="7">Circuit 8</option><option value="8">Circuit 9</option><option value="9">Circuit 10</option></select></div>
+<table class="circuit-table"><thead><tr><th>#</th><th class="pilot">Pilote</th><th>Chrono</th><th>Points</th><th>Écart</th></tr></thead><tbody id="circuitRows"></tbody></table>
+<p class="legend" id="circuitLegend"></p>
+<div class="quick-add"><h3>⚡ Saisie rapide - 1 chrono (sur téléphone)</h3><p class="help">Tu reçois un chrono sur Discord ? Tu le tapes ici, 10 secondes, sans ouvrir le grand tableau.</p><div class="quick-row"><select id="quickPilot"></select><input id="quickTime" placeholder="Ex : 0:22.456" inputmode="decimal"><button id="quickSave">✅ Ajouter ce chrono</button></div><p id="quickMsg" class="save-msg"></p></div>
+</div>
+<div class="actions">
     <button id="copyDiscord">Copier pour Discord</button>
     <button id="downloadJson" class="secondary">⬇️ Télécharger times.json (pour partager)</button>
     <span id="copyMsg"></span>
@@ -38,7 +52,7 @@
   <div id="editor" class="card editor hidden">
     <h2>✏️ Saisir les temps</h2>
     <p class="help">Clique sur ➕ Ajouter un joueur pour rajouter un copain. Tape les noms des joueurs et leurs chronos comme dans le jeu : <b>0:20.168</b> ou <b>20.168</b>. Laisse vide si le circuit n'est pas fait. Puis <b>Enregistrer</b>.</p>
-    <div id="editGrid"></div>
+    <div class="editor-meta"><label>Circuit en cours : <select id="currentCircuitSelect"><option value="0">Circuit 1</option><option value="1">Circuit 2</option><option value="2">Circuit 3</option><option value="3">Circuit 4</option><option value="4">Circuit 5</option><option value="5">Circuit 6</option><option value="6" selected>Circuit 7</option><option value="7">Circuit 8</option><option value="8">Circuit 9</option><option value="9">Circuit 10</option></select></label></div><div id="editGrid"></div>
     <div class="actions">
       <button id="saveEdit">✅ Enregistrer</button>
       <button id="addPlayerBtn" type="button">➕ Ajouter un joueur</button>

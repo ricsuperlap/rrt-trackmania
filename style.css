@@ -57,3 +57,15 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
   .card table{min-width:680px}
   h1{font-size:16px}
 }
+
+.banner{background:#1a2a4d;border:1px solid #ffcc00;border-radius:8px;margin:12px 18px 0;padding:10px 14px;font-size:14px;text-align:center}
+.tabs{display:flex;gap:8px;justify-content:center;padding:12px 18px 0;flex-wrap:wrap}
+.tab{background:#1a2a4d;color:#fff;border:2px solid #263356;padding:11px 18px;border-radius:999px;font-weight:bold;cursor:pointer;font-size:14px}
+.tab.active{background:#ffcc00;color:#111;border-color:#ffcc00}
+.circuit-picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.circuit-picker select,.editor-meta select{background:#0b1220;color:#fff;border:1px solid #34406a;border-radius:8px;padding:9px 12px;font-size:14px}
+.circuit-table{width:100%;border-collapse:collapse}.circuit-table th,.circuit-table td{padding:11px 8px}.circuit-table td.pilot{text-align:left}
+.quick-add{margin-top:16px;background:#0b1220;border:1px solid #34406a;border-radius:10px;padding:12px}
+.quick-row{display:flex;gap:8px;flex-wrap:wrap}.quick-row select,.quick-row input{flex:1;min-width:120px;background:#111c33;color:#fff;border:1px solid #34406a;border-radius:8px;padding:12px;font-size:15px}
+.editor-meta{margin-bottom:10px}
+@media(max-width:700px){.banner{margin:10px 8px 0;font-size:12px}.tabs{padding:10px 8px 0}.tab{flex:1;padding:10px 6px;font-size:12px}.quick-row{flex-direction:column}.quick-row select,.quick-row input,.quick-row button{width:100%}}

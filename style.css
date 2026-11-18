@@ -23,3 +23,6 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
 .edit-table input{width:100%;padding:7px 4px;border-radius:6px;border:1px solid #34406a;background:#0b1220;color:#fff;text-align:center;font-size:12px}
 .edit-table input.name{text-align:left;font-weight:bold} .save-msg{color:#9fe6a0;font-weight:bold}
 @media(max-width:800px){th,td{font-size:11px;padding:6px 2px} h1{font-size:18px}}
+
+.logo-img{width:72px;height:72px;object-fit:cover;border-radius:50%;border:3px solid #ffcc00;flex-shrink:0}
+@media(max-width:800px){.logo-img{width:56px;height:56px}}

@@ -43,7 +43,7 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
   th,td{font-size:12px;padding:7px 3px}
   td.total{font-size:15px}
   th.pilot,td.pilot{position:sticky;left:0;background:#111c33;z-index:2;min-width:110px;max-width:110px}
-  th.total,td.total{position:sticky;left:142px;z-index:2;background:#1e335e}
+  th.total,td.total{position:sticky;right:0;z-index:2}
   .actions button{flex:1 1 40%;padding:12px 8px;font-size:13px}
   .editor{padding:10px 8px}
   .edit-table{display:block;overflow-x:auto}
@@ -70,5 +70,4 @@ button.secondary{background:#263356;color:#fff} button.danger{background:#c0392b
 .editor-meta{margin-bottom:10px}
 @media(max-width:700px){.banner{margin:10px 8px 0;font-size:12px}.tabs{padding:10px 8px 0}.tab{flex:1;padding:10px 6px;font-size:12px}.quick-row{flex-direction:column}.quick-row select,.quick-row input,.quick-row button{width:100%}}
 
-th.total{background:#ffcc00;color:#111} td.total{font-weight:bold;font-size:17px;background:#1e335e}
-@media(max-width:700px){th.pilot,td.pilot{min-width:100px;max-width:100px} th.total,td.total{left:132px;min-width:56px}}
+td.pts-only{font-size:15px;font-weight:bold} td.pts-only b{font-size:16px}

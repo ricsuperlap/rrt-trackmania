@@ -1,4 +1,6 @@
 {
+  "season": "Fall 2026",
+  "current": "Circuit 7",
   "pilots": [
     "[CORT] Nicolas Richard",
     "mathYeuu2.0",
@@ -12,92 +14,138 @@
     "Papossib",
     "[CORT] parasite"
   ],
-  "times": [
-    {
-      "[CORT] Nicolas Richard": "0:20.168",
-      "mathYeuu2.0": "0:20.110",
-      "m0ugg": "0:20.184",
-      "Deuxfrai": "0:20.741",
-      "Strakiste": "0:20.145",
-      "Esyole": "0:20.146",
-      "Anyri23": "0:20.118",
-      "Kennyyo89": "0:20.120",
-      "Burning_Ham": "0:20.127",
-      "Papossib": "0:20.175",
-      "[CORT] parasite": "0:20.213"
+  "times": {
+    "[CORT] Nicolas Richard": {
+      "C1": 20168,
+      "C2": null,
+      "C3": 19798,
+      "C4": 21120,
+      "C5": null,
+      "C6": 27144,
+      "C7": 30468,
+      "C8": 29902,
+      "C9": null,
+      "C10": 30681
     },
-    {},
-    {
-      "[CORT] Nicolas Richard": "0:19.798",
-      "mathYeuu2.0": "0:19.298",
-      "m0ugg": "0:19.622",
-      "Deuxfrai": "0:20.505",
-      "Strakiste": "0:20.265",
-      "Esyole": "0:20.183",
-      "Anyri23": "0:19.459",
-      "Kennyyo89": "0:19.732",
-      "Burning_Ham": "0:19.178",
-      "Papossib": "0:19.998",
-      "[CORT] parasite": "0:20.218"
+    "mathYeuu2.0": {
+      "C1": 20110,
+      "C2": null,
+      "C3": 19298,
+      "C4": 20963,
+      "C5": null,
+      "C6": 26984,
+      "C7": null,
+      "C8": 29841,
+      "C9": null,
+      "C10": 30085
     },
-    {
-      "[CORT] Nicolas Richard": "0:21.120",
-      "mathYeuu2.0": "0:20.963",
-      "m0ugg": "0:20.934",
-      "Deuxfrai": "0:21.598",
-      "Strakiste": "0:20.981",
-      "Esyole": "0:21.595",
-      "Anyri23": "0:20.960",
-      "Kennyyo89": "0:21.096",
-      "Burning_Ham": "0:20.808",
-      "Papossib": "0:21.124",
-      "[CORT] parasite": "0:21.186"
+    "m0ugg": {
+      "C1": 20184,
+      "C2": null,
+      "C3": 19622,
+      "C4": 20934,
+      "C5": null,
+      "C6": 27188,
+      "C7": 31340,
+      "C8": 29780,
+      "C9": null,
+      "C10": 30390
     },
-    {},
-    {
-      "[CORT] Nicolas Richard": "0:27.144",
-      "mathYeuu2.0": "0:26.984",
-      "m0ugg": "0:27.188",
-      "Strakiste": "0:27.196",
-      "Esyole": "0:27.426",
-      "Anyri23": "0:27.042",
-      "Kennyyo89": "0:27.091",
-      "Burning_Ham": "0:26.844",
-      "Papossib": "0:27.237",
-      "[CORT] parasite": "0:27.428"
+    "Deuxfrai": {
+      "C1": 20741,
+      "C2": null,
+      "C3": 20505,
+      "C4": 21598,
+      "C5": null,
+      "C6": null,
+      "C7": null,
+      "C8": 30692,
+      "C9": null,
+      "C10": 31821
     },
-    {
-      "[CORT] Nicolas Richard": "0:30.468",
-      "m0ugg": "0:31.340",
-      "Strakiste": "0:29.896",
-      "Burning_Ham": "0:29.191",
-      "[CORT] parasite": "0:29.871"
+    "Strakiste": {
+      "C1": 20145,
+      "C2": null,
+      "C3": 20265,
+      "C4": 20981,
+      "C5": null,
+      "C6": 27196,
+      "C7": 29896,
+      "C8": 30327,
+      "C9": null,
+      "C10": 30328
     },
-    {
-      "[CORT] Nicolas Richard": "0:29.902",
-      "mathYeuu2.0": "0:29.841",
-      "m0ugg": "0:29.780",
-      "Deuxfrai": "0:30.692",
-      "Strakiste": "0:30.327",
-      "Anyri23": "0:29.896",
-      "Kennyyo89": "0:29.904",
-      "Burning_Ham": "0:29.313",
-      "Papossib": "0:30.374",
-      "[CORT] parasite": "0:30.667"
+    "Esyole": {
+      "C1": 20146,
+      "C2": null,
+      "C3": 20183,
+      "C4": 21595,
+      "C5": null,
+      "C6": 27426,
+      "C7": null,
+      "C8": null,
+      "C9": null,
+      "C10": 30574
     },
-    {},
-    {
-      "[CORT] Nicolas Richard": "0:30.681",
-      "mathYeuu2.0": "0:30.085",
-      "m0ugg": "0:30.390",
-      "Deuxfrai": "0:31.821",
-      "Strakiste": "0:30.328",
-      "Esyole": "0:30.574",
-      "Anyri23": "0:30.263",
-      "Kennyyo89": "0:30.586",
-      "Burning_Ham": "0:29.850",
-      "Papossib": "0:30.740",
-      "[CORT] parasite": "0:30.751"
+    "Anyri23": {
+      "C1": 20118,
+      "C2": null,
+      "C3": 19459,
+      "C4": 20960,
+      "C5": null,
+      "C6": 27042,
+      "C7": null,
+      "C8": 29896,
+      "C9": null,
+      "C10": 30263
+    },
+    "Kennyyo89": {
+      "C1": 20120,
+      "C2": null,
+      "C3": 19732,
+      "C4": 21096,
+      "C5": null,
+      "C6": 27091,
+      "C7": null,
+      "C8": 29904,
+      "C9": null,
+      "C10": 30586
+    },
+    "Burning_Ham": {
+      "C1": 20127,
+      "C2": null,
+      "C3": 19178,
+      "C4": 20808,
+      "C5": null,
+      "C6": 26844,
+      "C7": 29191,
+      "C8": 29313,
+      "C9": null,
+      "C10": 29850
+    },
+    "Papossib": {
+      "C1": 20175,
+      "C2": null,
+      "C3": 19998,
+      "C4": 21124,
+      "C5": null,
+      "C6": 27237,
+      "C7": null,
+      "C8": 30374,
+      "C9": null,
+      "C10": 30740
+    },
+    "[CORT] parasite": {
+      "C1": 20213,
+      "C2": null,
+      "C3": 20218,
+      "C4": 21186,
+      "C5": null,
+      "C6": 27428,
+      "C7": 29871,
+      "C8": 30667,
+      "C9": null,
+      "C10": 30751
     }
-  ]
+  }
 }

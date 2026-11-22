@@ -1,150 +1,95 @@
 {
-  "season": "Fall 2026",
-  "current": "Circuit 7",
-  "pilots": [
-    "[CORT] Nicolas Richard",
-    "mathYeuu2.0",
-    "m0ugg",
-    "Deuxfrai",
-    "Strakiste",
-    "Esyole",
-    "Anyri23",
-    "Kennyyo89",
-    "Burning_Ham",
-    "Papossib",
-    "[CORT] parasite"
-  ],
   "times": {
     "[CORT] Nicolas Richard": {
       "C1": 20168,
-      "C2": null,
       "C3": 19798,
       "C4": 21120,
-      "C5": null,
       "C6": 27144,
       "C7": 30468,
       "C8": 29902,
-      "C9": null,
       "C10": 30681
     },
     "mathYeuu2.0": {
       "C1": 20110,
-      "C2": null,
       "C3": 19298,
       "C4": 20963,
-      "C5": null,
       "C6": 26984,
-      "C7": null,
       "C8": 29841,
-      "C9": null,
       "C10": 30085
     },
     "m0ugg": {
       "C1": 20184,
-      "C2": null,
       "C3": 19622,
       "C4": 20934,
-      "C5": null,
       "C6": 27188,
       "C7": 31340,
       "C8": 29780,
-      "C9": null,
       "C10": 30390
     },
     "Deuxfrai": {
       "C1": 20741,
-      "C2": null,
       "C3": 20505,
       "C4": 21598,
-      "C5": null,
-      "C6": null,
-      "C7": null,
       "C8": 30692,
-      "C9": null,
       "C10": 31821
     },
     "Strakiste": {
       "C1": 20145,
-      "C2": null,
       "C3": 20265,
       "C4": 20981,
-      "C5": null,
       "C6": 27196,
       "C7": 29896,
       "C8": 30327,
-      "C9": null,
       "C10": 30328
     },
     "Esyole": {
       "C1": 20146,
-      "C2": null,
       "C3": 20183,
       "C4": 21595,
-      "C5": null,
       "C6": 27426,
-      "C7": null,
-      "C8": null,
-      "C9": null,
       "C10": 30574
     },
     "Anyri23": {
       "C1": 20118,
-      "C2": null,
       "C3": 19459,
       "C4": 20960,
-      "C5": null,
       "C6": 27042,
-      "C7": null,
       "C8": 29896,
-      "C9": null,
-      "C10": 30263
+      "C10": 30263,
+      "C7": 29855
     },
     "Kennyyo89": {
       "C1": 20120,
-      "C2": null,
       "C3": 19732,
       "C4": 21096,
-      "C5": null,
       "C6": 27091,
-      "C7": null,
       "C8": 29904,
-      "C9": null,
       "C10": 30586
     },
     "Burning_Ham": {
       "C1": 20127,
-      "C2": null,
       "C3": 19178,
       "C4": 20808,
-      "C5": null,
       "C6": 26844,
-      "C7": 29191,
+      "C7": 28966,
       "C8": 29313,
-      "C9": null,
       "C10": 29850
     },
     "Papossib": {
       "C1": 20175,
-      "C2": null,
       "C3": 19998,
       "C4": 21124,
-      "C5": null,
       "C6": 27237,
-      "C7": null,
       "C8": 30374,
-      "C9": null,
       "C10": 30740
     },
     "[CORT] parasite": {
       "C1": 20213,
-      "C2": null,
       "C3": 20218,
       "C4": 21186,
-      "C5": null,
       "C6": 27428,
       "C7": 29871,
       "C8": 30667,
-      "C9": null,
       "C10": 30751
     }
   }

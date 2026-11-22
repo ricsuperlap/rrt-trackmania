@@ -1,0 +1,60 @@
+{
+  "game": "ACC",
+  "event": "Hotlap Paul Ricard",
+  "car": "Porsche 992 GT3 Cup 2021",
+  "updated": "2026-11-22T10:29:38.656Z",
+  "hotlap": [
+    {
+      "name": "GregZ",
+      "time": "1:57,212"
+    },
+    {
+      "name": "CORTbigfoss2",
+      "time": "1:57,975"
+    },
+    {
+      "name": "[CORT] Nicolas",
+      "time": "1:58,175"
+    },
+    {
+      "name": "mikamugen",
+      "time": "1:58,185"
+    },
+    {
+      "name": "XRS 486 KüBü",
+      "time": "1:58,670"
+    },
+    {
+      "name": "[CORT] 4cordes",
+      "time": "1:59,747"
+    },
+    {
+      "name": "nico-81100-",
+      "time": "2:00,147"
+    },
+    {
+      "name": "m0ugg",
+      "time": "2:00,467"
+    },
+    {
+      "name": "Leparasite8377",
+      "time": "2:00,610"
+    },
+    {
+      "name": "Yannz",
+      "time": ""
+    },
+    {
+      "name": "Papossib",
+      "time": ""
+    },
+    {
+      "name": "Deuxfrai",
+      "time": ""
+    },
+    {
+      "name": "Stephskippy66",
+      "time": ""
+    }
+  ]
+}

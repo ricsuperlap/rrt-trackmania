@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RRT - Rocket Racing Team</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#0a0a08;color:#fff}
+header{background:#111;padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:4px solid #ffd400}
+header img{height:52px;background:#fff;border-radius:8px;padding:4px}
+header h1{margin:0;font-size:28px;letter-spacing:1px}header p{margin:2px 0 0;color:#bbb;font-size:13px}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#171713}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:700;background:#ffd400;color:#111}
+button.sec{background:#2a2a24;color:#fff}button.blue{background:#1d4ed8;color:#fff}
+button.green{background:#16a34a;color:#fff}button:disabled{opacity:.6}
+main{padding:16px 18px 40px;max-width:1100px;margin:0 auto}
+.card{background:#131311;border:1px solid #2a2a24;border-radius:12px;padding:14px;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:#e8e8e8;color:#111;border-radius:8px;overflow:hidden}
+th,td{padding:8px;text-align:left;font-size:14px;border-bottom:1px solid #ccc;white-space:nowrap}
+th{background:#222;color:#fff}.hot th{background:#1d4ed8}.hot{background:#dbeafe!important}
+.pos1{background:#dcfce7}.pos2{background:#fef9c3}.pos3{background:#ffedd5}
+input{padding:8px;border-radius:6px;border:1px solid #999;width:100%}
+.small{color:#b8b8ae;font-size:13px}.big{font-size:22px;font-weight:900}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.hidden{display:none}.ok{color:#16a34a;font-weight:800}.err{color:#ef4444;font-weight:800}
+</style>
+</head>
+<body>
+<header>
+<img src="logo.jpg" alt="RRT" onerror="this.style.display='none'">
+<div><h1>RRT &bull; ROCKET RACING TEAM</h1><p>Trackmania &bull; ACC &bull; ACE &bull; LMU</p></div>
+</header>
+<nav>
+<button onclick="show('home')">ACCUEIL</button>
+<button onclick="show('tm')">TRACKMANIA</button>
+<button onclick="show('acc')">ACC</button>
+<button onclick="show('ace')">ACE</button>
+<button onclick="show('lmu')">LMU</button>
+</nav>
+<main>
+<!-- HOME -->
+<section id="home">
+<h2>Bienvenue chez RRT</h2>
+<div class="grid">
+<div class="card"><h3>TRACKMANIA</h3><p>Circuit en cours : <b>Circuit 7</b> &bull; Ferme dimanche 20h00</p><p>Leader : <b id="homeTmLeader">Burning_Ham &mdash; 0:29.191</b></p><button onclick="show('tm')">Voir Trackmania</button></div>
+<div class="card"><h3>ACC</h3><p>Hotlap : <b>Paul Ricard</b> &bull; Porsche 992 GT3 Cup 2021</p><p>Leader Hotlap : <b id="homeAccLeader">GregZ &mdash; 1:57,212</b></p><p>G&eacute;n&eacute;ral : <b>XRS &mdash; 129 pts</b> &bull; Prochaine course C4 : <b>06/12 &agrave; 10h30</b></p><button onclick="show('acc')">Voir ACC</button></div>
+<div class="card"><h3>ACE</h3><p>En pr&eacute;paration.</p></div>
+<div class="card"><h3>LMU</h3><p>En pr&eacute;paration.</p></div>
+</div>
+</section>
+
+<!-- TRACKMANIA -->
+<section id="tm" class="hidden">
+<h2>Trackmania &mdash; Circuit 7</h2>
+<p class="small">Bar&egrave;me : 32 - 26 - 22 - 19 - 17 - 15 - 13 - 11 - 9 - 7 - 5 - 4 - 3 - 2 - 1 - 0</p>
+<div class="card"><h3>Classement Circuit 7</h3><div id="tmTable"></div></div>
+<div class="card"><h3>Historique</h3><p>C1 &bull; C2 &bull; C3 &bull; C4 &bull; C5 &bull; C6 &bull; <b>C7 en cours</b> &bull; C8 &bull; C9 &bull; C10</p><p class="small">Les circuits pr&eacute;c&eacute;dents sont conserv&eacute;s dans times.json sur GitHub.</p></div>
+</section>
+
+<!-- ACC -->
+<section id="acc" class="hidden">
+<h2>ACC &mdash; Assetto Corsa Competizione</h2>
+<div class="tabs">
+<button id="btnGen" onclick="accTab('gen')">G&Eacute;N&Eacute;RAL</button>
+<button id="btnHot" class="blue" onclick="accTab('hot')">HOTLAP EN COURS</button>
+<button id="btnCal" class="sec" onclick="accTab('cal')">CALENDRIER</button>
+</div>
+<div id="acc-gen" class="card">
+<h3>Classement G&eacute;n&eacute;ral &mdash; Total = Hotlaps + Courses</h3>
+<p class="small">Course : 25-18-15-12-10-8-4-2-1 &nbsp;|&nbsp; Hotlap : 13-12-11-10-9-8-7-6-5-4-3-2-1 &nbsp;|&nbsp; C1 BMW = double sprint (ex : 25+15)</p>
+<table><tr><th>Pos</th><th>Pilote</th><th>Total</th></tr>
+<tr class="pos1"><td>1</td><td>XRS</td><td>129</td></tr>
+<tr class="pos2"><td>2</td><td>GregZ</td><td>118</td></tr>
+<tr class="pos3"><td>3</td><td>K&uuml;B&uuml;</td><td>112</td></tr>
+<tr><td>4</td><td>[CORT] Nicolas</td><td>98</td></tr>
+<tr><td>5</td><td>mikamugen</td><td>92</td></tr>
+</table>
+<p class="small">Vainqueurs mini-championnats : <i>BMW : Greg</i> &nbsp; <i>Alpine : Kubu</i> &nbsp; <i>Ferrari : VBR</i> &nbsp; Porsche Cup : en cours</p>
+<p class="small">Les points Hotlap / Courses restent saisis manuellement pour l'instant. Le Total est recalcul&eacute; apr&egrave;s chaque saisie.</p>
+</div>
+<div id="acc-hot" class="card">
+<h3>Hotlap en cours &mdash; Paul Ricard &mdash; Porsche 992 GT3 Cup 2021</h3>
+<p id="accMsg"></p>
+<div id="accHotTable"></div>
+<p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+<button id="accEditBtn" onclick="accUnlock()">MODIFIER</button>
+<button id="accSaveBtn" class="green hidden" onclick="accSave()">Enregistrer les temps</button>
+<button id="accCancelBtn" class="sec hidden" onclick="accRender()">Annuler</button>
+<button class="blue" onclick="accDownload()">T&eacute;l&eacute;charger acc.json</button>
+</p>
+<p class="small">Code : 9645 &bull; Format temps : 1:57,212 &bull; Vide = pas de temps</p>
+</div>
+<div id="acc-cal" class="card hidden">
+<h3>Calendrier ACC</h3>
+<table class="hot"><tr><th>&Eacute;preuve</th><th>Circuit / Voiture</th><th>Date</th></tr>
+<tr><td>HL1 + C1</td><td>Laguna Seca &mdash; BMW</td><td>HL 31/08-10/09 &bull; C1 13/09 10h30</td></tr>
+<tr><td>HL2 + HL3 + C2</td><td>Zandvoort + Barcelona &mdash; Alpine</td><td>HL2 21-29/09 &bull; HL3 30/09-08/10 &bull; C2 11/10 10h30</td></tr>
+<tr><td>HL4 + HL5 + C3</td><td>Misano + Monza &mdash; Ferrari</td><td>HL4 19-21/10 &bull; HL5 28/10-05/11 &bull; C3 08/11 10h30</td></tr>
+<tr><td>HL6 + HL7 + C4</td><td>Paul Ricard + Spa &mdash; Porsche</td><td>HL6 16-24/11 &bull; HL7 25/11-03/12 &bull; C4 06/12 10h30</td></tr>
+</table><p class="small">Toutes les s&eacute;ances : sec / jour.</p>
+</div>
+</section>
+
+<section id="ace" class="hidden"><h2>ACE</h2><div class="card"><p>En pr&eacute;paration.</p></div></section>
+<section id="lmu" class="hidden"><h2>LMU</h2><div class="card"><p>En pr&eacute;paration.</p></div></section>
+</main>
+<script>
+function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0);}
+function accTab(t){
+ document.getElementById('acc-gen').classList.toggle('hidden',t!=='gen');
+ document.getElementById('acc-hot').classList.toggle('hidden',t!=='hot');
+ document.getElementById('acc-cal').classList.toggle('hidden',t!=='cal');
+}
+// Trackmania - temps reels Circuit 7
+const tm=[["Burning_Ham","0:29.191",32],["[CORT] parasite","0:29.871",26],["Strakiste","0:29.896",22],["[CORT] Nicolas Richard","0:30.468",19],["m0ugg","0:31.340",17]];
+let tmHtml='<table><tr><th>Pos</th><th>Pilote</th><th>Temps</th><th>Points</th><th>&Eacute;cart</th></tr>';
+tm.forEach((r,i)=>{let c=i==0?'pos1':i==1?'pos2':i==2?'pos3':'';tmHtml+=`<tr class="${c}"><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>+${(0).toFixed(3)}</td></tr>`});
+tmHtml+='</table><p class="small">5 / 11 pilotes ont un temps. Les autres n\'ont pas encore roul&eacute;.</p>';
+document.getElementById('tmTable').innerHTML=tmHtml;
+// ACC Hotlap Paul Ricard
+let acc=[
+ {name:"GregZ",time:"1:57,212"},{name:"CORTbigfoss2",time:"1:57,975"},{name:"[CORT] Nicolas",time:"1:58,175"},
+ {name:"mikamugen",time:"1:58,622"},{name:"XRS",time:"1:58,670"},{name:"[CORT] 4cordes",time:"1:59,747"},
+ {name:"nico-81100-",time:"2:00,147"},{name:"m0ugg",time:"2:00,467"},{name:"Leparasite8377",time:"2:00,610"},
+ {name:"Yannz",time:""},{name:"Papossib",time:""},{name:"Deuxfrai",time:""}
+];
+let editing=false;
+function toSec(t){if(!t)return 9999;let p=t.trim().replace(',','.').split(':');return parseInt(p[0])*60+parseFloat(p[1]||0);}
+function accRender(){
+ let sorted=[...acc].sort((a,b)=>toSec(a.time)-toSec(b.time));
+ let ref=toSec(sorted[0].time);
+ let h='<table><tr><th>Pos</th><th>Pilote</th><th>Temps</th><th>&Eacute;cart 1er</th><th>&Eacute;cart pr&eacute;c.</th></tr>';
+ sorted.forEach((r,i)=>{
+  let c=i==0?'pos1':i==1?'pos2':i==2?'pos3':'';
+  let gap=r.time?'+'+(toSec(r.time)-ref).toFixed(3):'-';
+  let prev='-'; if(i>0&&r.time&&sorted[i-1].time) prev='+'+(toSec(r.time)-toSec(sorted[i-1].time)).toFixed(3);
+  let cell=editing?`<input data-name="${r.name}" value="${r.time}" placeholder="1:57,212">`:(r.time||'<span class="small">Pas de temps</span>');
+  h+=`<tr class="${c}"><td>${i+1}</td><td>${r.name}</td><td>${cell}</td><td>${gap}</td><td>${prev}</td></tr>`;
+ });
+ h+='</table>'; document.getElementById('accHotTable').innerHTML=h;
+ document.getElementById('accSaveBtn').classList.toggle('hidden',!editing);
+ document.getElementById('accCancelBtn').classList.toggle('hidden',!editing);
+}
+function accUnlock(){let c=prompt('Code admin :');if(c==='9645'){editing=true;document.getElementById('accMsg').innerHTML='<span class="ok">Code accept\u00e9. Tu peux modifier les temps.</span>';accRender();}else{document.getElementById('accMsg').innerHTML='<span class="err">Code incorrect.</span>';}}
+function accSave(){
+ document.querySelectorAll('#accHotTable input').forEach(inp=>{let p=acc.find(x=>x.name===inp.dataset.name);if(p)p.time=inp.value.trim();});
+ editing=false;accRender();
+ let leader=[...acc].filter(x=>x.time).sort((a,b)=>toSec(a.time)-toSec(b.time))[0];
+ if(leader)document.getElementById('homeAccLeader').textContent=leader.name+' — '+leader.time;
+ document.getElementById('accMsg').innerHTML='<span class="ok">Temps enregistr\u00e9s.</span>';
+}
+function accDownload(){
+ let data={game:"ACC",event:"Hotlap Paul Ricard",car:"Porsche 992 GT3 Cup 2021",updated:new Date().toISOString(),hotlap:acc};
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc.json';a.click();
+ document.getElementById('accMsg').innerHTML='<span class="ok">acc.json t\u00e9l\u00e9charg\u00e9. Mets-le dans GitHub avec Add file / Upload files.</span>';
+}
+accRender();
+</script>
+</body>
+</html>

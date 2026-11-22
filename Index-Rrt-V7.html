@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RRT - Rocket Racing Team</title>
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0a0a08;color:#fff}
+header{background:#111;padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:4px solid #ffd400}
+.logo{background:#ffd400;color:#111;border-radius:12px;padding:8px 14px;font-size:32px;font-weight:900;line-height:1;text-align:center}
+.logo span{font-size:11px;letter-spacing:1px}header h1{margin:0;font-size:26px}header p{margin:2px 0 0;color:#bbb;font-size:13px}
+header img{height:64px;background:#fff;border-radius:8px;padding:4px}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#171713}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:700;background:#ffd400;color:#111}
+button.sec{background:#2a2a24;color:#fff}button.blue{background:#1d4ed8;color:#fff}button.green{background:#16a34a;color:#fff}
+main{padding:16px 18px 40px;max-width:1150px;margin:0 auto}
+.card{background:#131311;border:1px solid #2a2a24;border-radius:12px;padding:14px;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:#e8e8e8;color:#111;border-radius:8px;overflow:hidden}
+th,td{padding:8px;text-align:left;font-size:13px;border-bottom:1px solid #ccc;white-space:nowrap}
+th{background:#222;color:#fff}.hot th{background:#1d4ed8}.pos1{background:#dcfce7}.pos2{background:#fef9c3}.pos3{background:#ffedd5}
+input{padding:8px;border-radius:6px;border:1px solid #999;width:100%}.small{color:#b8b8ae;font-size:13px}
+.hidden{display:none}.ok{color:#16a34a;font-weight:800}.err{color:#ef4444;font-weight:800}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+</style></head><body>
+<header><div class="logo">RRT<br><span>ROCKET RACING TEAM</span></div><img src="logo.jpg" alt="" onerror="this.style.display='none'"><div><h1>RRT &bull; ROCKET RACING TEAM</h1><p>Trackmania &bull; ACC &bull; ACE &bull; LMU</p></div></header>
+<nav><button onclick="show('home')">ACCUEIL</button><button onclick="show('tm')">TRACKMANIA</button><button onclick="show('acc')">ACC</button><button onclick="show('ace')">ACE</button><button onclick="show('lmu')">LMU</button></nav>
+<main>
+<section id="home"><h2>Bienvenue chez RRT</h2><div class="grid">
+<div class="card"><h3>TRACKMANIA</h3><p>11 pilotes &bull; 10 circuits &bull; Circuit 7 en cours - Cl&ocirc;ture dimanche 20h00</p><p>Leader Circuit 7 : <b>Burning_Ham &mdash; 0:29.191</b></p><button onclick="show('tm')">Voir Trackmania</button></div>
+<div class="card"><h3>ACC</h3><p>11 pilotes &bull; Hotlap 6 &mdash; Paul Ricard &bull; Porsche 992 GT3 Cup 2021</p><p>Leader Hotlap : <b id="homeAccLeader">GregZ &mdash; 1:57,212</b></p><p>G&eacute;n&eacute;ral : <b>XRS 486 K&uuml;B&uuml; &mdash; 129 pts</b> &bull; Prochaine C4 : <b>06/12 10h30</b></p><button onclick="show('acc')">Voir ACC</button></div>
+<div class="card"><h3>ACE - Assetto Corsa Evo</h3><p>Page en pr&eacute;paration.</p></div><div class="card"><h3>LMU - Le Mans Ultimate</h3><p>Page en pr&eacute;paration.</p></div></div></section>
+<section id="tm" class="hidden"><h2>Trackmania &mdash; Circuit 7</h2><p class="small">Bar&egrave;me : 32 - 26 - 22 - 19 - 17 - 15 - 13 - 11 - 9 - 7 - 5 - 4 - 3 - 2 - 1 - 0 &bull; 11 pilotes</p>
+<div class="tabs"><button onclick="tmTab('gen')">G&Eacute;N&Eacute;RAL</button><button class="blue" onclick="tmTab('c7')">CIRCUIT 7 EN COURS</button></div>
+<div id="tm-gen" class="card"><h3>Classement G&eacute;n&eacute;ral Trackmania &mdash; Total points</h3><p class="small">Bar&egrave;me : 32 - 26 - 22 - 19 - 17 - 15 - 13 - 11 - 9 - 7 - 5 - 4 - 3 - 2 - 1 - 0</p><div id="tmGenTable" style="overflow-x:auto"><table><tr><th>Pos</th><th>Pilote</th><th>Total</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th><th>C7</th><th>C8</th><th>C9</th><th>C10</th></tr><tr class="pos1"><td>1</td><td>Burning_Ham</td><td>211</td><td>19</td><td>-</td><td>32</td><td>32</td><td>-</td><td>32</td><td>32</td><td>32</td><td>-</td><td>32</td></tr>
+<tr class="pos2"><td>2</td><td>mathYeuu2.0</td><td>151</td><td>32</td><td>-</td><td>26</td><td>19</td><td>-</td><td>26</td><td>-</td><td>22</td><td>-</td><td>26</td></tr>
+<tr class="pos3"><td>3</td><td>Anyri23</td><td>133</td><td>26</td><td>-</td><td>22</td><td>22</td><td>-</td><td>22</td><td>-</td><td>19</td><td>-</td><td>22</td></tr>
+<tr><td>4</td><td>m0ugg</td><td>129</td><td>9</td><td>-</td><td>19</td><td>26</td><td>-</td><td>15</td><td>17</td><td>26</td><td>-</td><td>17</td></tr>
+<tr><td>5</td><td>Strakiste</td><td>108</td><td>17</td><td>-</td><td>7</td><td>17</td><td>-</td><td>13</td><td>22</td><td>13</td><td>-</td><td>19</td></tr>
+<tr><td>6</td><td>[CORT] Nicolas Richard</td><td>105</td><td>13</td><td>-</td><td>15</td><td>13</td><td>-</td><td>17</td><td>19</td><td>17</td><td>-</td><td>11</td></tr>
+<tr><td>7</td><td>Kennyyo89</td><td>101</td><td>22</td><td>-</td><td>17</td><td>15</td><td>-</td><td>19</td><td>-</td><td>15</td><td>-</td><td>13</td></tr>
+<tr><td>8</td><td>[CORT] parasite</td><td>74</td><td>7</td><td>-</td><td>9</td><td>9</td><td>-</td><td>7</td><td>26</td><td>9</td><td>-</td><td>7</td></tr>
+<tr><td>9</td><td>Papossib</td><td>66</td><td>11</td><td>-</td><td>13</td><td>11</td><td>-</td><td>11</td><td>-</td><td>11</td><td>-</td><td>9</td></tr>
+<tr><td>10</td><td>Esyole</td><td>57</td><td>15</td><td>-</td><td>11</td><td>7</td><td>-</td><td>9</td><td>-</td><td>-</td><td>-</td><td>15</td></tr>
+<tr><td>11</td><td>Deuxfrai</td><td>27</td><td>5</td><td>-</td><td>5</td><td>5</td><td>-</td><td>-</td><td>-</td><td>7</td><td>-</td><td>5</td></tr></table></div><p class="small">Leader G&eacute;n&eacute;ral : Burning_Ham &mdash; 211 pts</p></div>
+<div id="tm-c7" class="card"><h3>Classement Circuit 7</h3><p id="tmMsg"></p><div id="tmTable"></div>
+<p style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button onclick="tmUnlock()">MODIFIER TRACKMANIA</button><button id="tmSaveBtn" class="green hidden" onclick="tmSave()">Enregistrer les temps</button><button id="tmCancelBtn" class="sec hidden" onclick="tmRender()">Annuler</button><button class="blue" onclick="tmDownload()">T&eacute;l&eacute;charger times.json</button></p>
+<p class="small">Code : 9645 &bull; Format : 0:29.191 &bull; Vide = pas de temps &bull; Pour que &ccedil;a reste, mets le times.json t&eacute;l&eacute;charg&eacute; sur GitHub.</p></div>
+<div class="card"><h3>Historique</h3><p>C1 &bull; C2 &bull; C3 &bull; C4 &bull; C5 &bull; C6 &bull; <b>C7 en cours</b> &bull; C8 &bull; C9 &bull; C10</p></div></section>
+<section id="acc" class="hidden"><h2>ACC &mdash; Assetto Corsa Competizione</h2><div class="tabs"><button onclick="accTab('gen')">G&Eacute;N&Eacute;RAL</button><button class="blue" onclick="accTab('hot')">HOTLAP EN COURS</button><button class="sec" onclick="accTab('cal')">CALENDRIER</button></div>
+<div id="acc-gen" class="card"><h3>Classement G&eacute;n&eacute;ral &mdash; Total = Hotlaps + Courses</h3><p class="small">Course : 25-18-15-12-10-8-4-2-1 | Hotlap : 13-12-11-10-9-8-7-6-5-4-3-2-1 | C1 BMW = double sprint (ex : 25+15) &bull; 1er vert, 2e jaune, 3e orange, vainqueur mini-championnat en italique</p>
+<div style="overflow-x:auto"><table><tr><th>Pos</th><th>Pilote</th><th>Total</th><th>HL1</th><th>C1</th><th>HL2</th><th>HL3</th><th>C2</th><th>HL4</th><th>HL5</th><th>C3</th><th>HL6</th><th>HL7</th><th>C4</th></tr>
+<tr class="pos1"><td>1</td><td>XRS 486 K&uuml;B&uuml;</td><td>129</td><td>10</td><td>25+15</td><td>12</td><td>6</td><td>25</td><td>11</td><td>&mdash;</td><td>25</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr class="pos2"><td>2</td><td>VBR bigfoss2</td><td>110</td><td>13</td><td>12+1</td><td>11</td><td>13</td><td>18</td><td>13</td><td>11</td><td>18</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr class="pos3"><td>3</td><td>BSR Greg Z</td><td>100</td><td>12</td><td>15+25</td><td>13</td><td>12</td><td>&mdash;</td><td>&mdash;</td><td>10</td><td>13</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>4</td><td>CORT Nicolas R</td><td>96</td><td>11</td><td>8+18</td><td>10</td><td>10</td><td>&mdash;</td><td>12</td><td>12</td><td>15</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>5</td><td>CORT 4cordes</td><td>85</td><td>9</td><td>18+12</td><td>9</td><td>11</td><td>&mdash;</td><td>8</td><td>10</td><td>8</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>6</td><td>M0ugg</td><td>71</td><td>8</td><td>10+10</td><td>6</td><td>8</td><td>15</td><td>7</td><td>7</td><td>0</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>7</td><td>VBR parasite</td><td>64</td><td>6</td><td>2+4</td><td>7</td><td>9</td><td>12</td><td>6</td><td>8</td><td>10</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>8</td><td>nico-81100-</td><td>64</td><td>7</td><td>4+8</td><td>8</td><td>7</td><td>&mdash;</td><td>9</td><td>9</td><td>12</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>9</td><td>Papossib</td><td>40</td><td>5</td><td>&mdash;</td><td>5</td><td>5</td><td>10</td><td>5</td><td>6</td><td>4</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>10</td><td>Deuxfrai</td><td>27</td><td>4</td><td>1+2</td><td>3</td><td>4</td><td>8</td><td>&mdash;</td><td>5</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td>11</td><td>Stephskippy66</td><td>7</td><td>&mdash;</td><td>&mdash;</td><td>4</td><td>3</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+</table></div><p class="small">Vainqueurs mini-championnats : <i>BMW : Greg</i> &nbsp; <i>Alpine : Kubu</i> &nbsp; <i>Ferrari : VBR</i> &nbsp; Porsche Cup : en cours</p></div>
+<div id="acc-hot" class="card"><h3>Hotlap en cours &mdash; Paul Ricard &mdash; Porsche 992 GT3 Cup 2021 &mdash; lun 16/11 au mar 24/11</h3><p id="accMsg"></p><div id="accHotTable"></div>
+<p style="display:flex;gap:8px;flex-wrap:wrap"><button onclick="accUnlock()">MODIFIER</button><button id="accSaveBtn" class="green hidden" onclick="accSave()">Enregistrer les temps</button><button id="accCancelBtn" class="sec hidden" onclick="accRender()">Annuler</button><button class="blue" onclick="accDownload()">T&eacute;l&eacute;charger acc.json</button></p>
+<p class="small">Code : 9645 &bull; Format : 1:57,212 &bull; Vide = pas de temps &bull; Les points HL6 du G&eacute;n&eacute;ral ne changent pas automatiquement.</p></div>
+<div id="acc-cal" class="card hidden"><h3>Calendrier ACC &mdash; jusqu&rsquo;&agrave; Course 4</h3><table><tr><th>&Eacute;preuve</th><th>Dates</th><th>Circuit</th><th>Voitures</th><th>M&eacute;t&eacute;o</th></tr>
+<tr><td><b>BMW M2 CUP</b></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HOTLAP 1</td><td>lun 31/08 au jeu 10/09</td><td>Laguna Seca</td><td>BMW M2 CS Racing</td><td>sec / jour</td></tr>
+<tr><td>COURSE 1</td><td>dim 13/09 10h30</td><td>Laguna Seca</td><td>BMW M2 CS Racing</td><td>sec / jour</td></tr>
+<tr><td><b>ALPINE CUP</b></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HOTLAP 2</td><td>lun 21/09 au mar 29/09</td><td>Zandvoort</td><td>Alpine A110 GT4</td><td>sec / jour</td></tr>
+<tr><td>HOTLAP 3</td><td>mer 30/09 au jeu 08/10</td><td>Barcelone</td><td>Alpine A110 GT4</td><td>sec / jour</td></tr>
+<tr><td>COURSE 2</td><td>dim 11/10 10h30</td><td>un des 2 sus-roul&eacute;s</td><td>Alpine A110 GT4</td><td>sec / jour</td></tr>
+<tr><td><b>FERRARI CHALLENGE</b></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HOTLAP 4</td><td>lun 19/10 au mar 21/10</td><td>Misano</td><td>Ferrari 488 Challenge Evo 2020</td><td>sec / jour</td></tr>
+<tr><td>HOTLAP 5</td><td>mer 28/10 au jeu 05/11</td><td>Monza</td><td>Ferrari 488 Challenge Evo 2020</td><td>sec / jour</td></tr>
+<tr><td>COURSE 3</td><td>dim 08/11 10h30</td><td>un des 2 sus-roul&eacute;s</td><td>Ferrari 488 Challenge Evo 2020</td><td>sec / jour</td></tr>
+<tr><td><b>PORSCHE CUP</b></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HOTLAP 6</td><td>lun 16/11 au mar 24/11</td><td>Paul Ricard</td><td>Porsche 992 GT3 Cup 2021</td><td>sec / jour</td></tr>
+<tr><td>HOTLAP 7</td><td>mer 25/11 au jeu 03/12</td><td>Spa</td><td>Porsche 992 GT3 Cup 2021</td><td>sec / jour</td></tr>
+<tr><td>COURSE 4</td><td>dim 06/12 10h30</td><td>un des 2 sus-roul&eacute;s</td><td>Porsche 992 GT3 Cup 2021</td><td>sec / jour</td></tr>
+</table></div></section>
+<section id="ace" class="hidden"><h2>ACE - Assetto Corsa Evo</h2><div class="card"><p>Page en pr&eacute;paration.</p></div></section>
+<section id="lmu" class="hidden"><h2>LMU - Le Mans Ultimate</h2><div class="card"><p>Page en pr&eacute;paration.</p></div></section></main>
+<script>
+function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0);}
+function tmTab(t){document.getElementById('tm-gen').classList.toggle('hidden',t!=='gen');document.getElementById('tm-c7').classList.toggle('hidden',t!=='c7');}
+function accTab(t){document.getElementById('acc-gen').classList.toggle('hidden',t!=='gen');document.getElementById('acc-hot').classList.toggle('hidden',t!=='hot');document.getElementById('acc-cal').classList.toggle('hidden',t!=='cal');}
+// Trackmania - 11 pilotes, C7 reels
+let tm=[
+{name:"Burning_Ham",time:"0:29.191"},
+{name:"[CORT] parasite",time:"0:29.871"},
+{name:"Strakiste",time:"0:29.896"},
+{name:"[CORT] Nicolas Richard",time:"0:30.468"},
+{name:"m0ugg",time:"0:31.340"},
+{name:"mathYeuu2.0",time:""},
+{name:"Deuxfrai",time:""},
+{name:"Esyole",time:""},
+{name:"Anyri23",time:""},
+{name:"Kennyyo89",time:""},
+{name:"Papossib",time:""}
+];
+let tmEditing=false;
+function tmToSec(t){if(!t)return 9999;let p=t.trim().split(':');if(p.length<2) return 9999;let secPart=p[1].split('.');let s=parseInt(p[0])*60+parseInt(secPart[0]||0);let ms=secPart[1]?parseInt((secPart[1]+'000').slice(0,3)):0;return s+ms/1000;}
+function tmPointsForRank(i){return [32,26,22,19,17,15,13,11,9,7,5][i]||0;}
+
+let TM_BASE={'[CORT] Nicolas Richard': {C1:20168,C3:19798,C4:21120,C6:27144,C7:30468,C8:29902,C10:30681},'mathYeuu2.0': {C1:20110,C3:19298,C4:20963,C6:26984,C8:29841,C10:30085},'m0ugg': {C1:20184,C3:19622,C4:20934,C6:27188,C7:31340,C8:29780,C10:30390},'Deuxfrai': {C1:20741,C3:20505,C4:21598,C8:30692,C10:31821},'Strakiste': {C1:20145,C3:20265,C4:20981,C6:27196,C7:29896,C8:30327,C10:30328},'Esyole': {C1:20146,C3:20183,C4:21595,C6:27426,C10:30574},'Anyri23': {C1:20118,C3:19459,C4:20960,C6:27042,C8:29896,C10:30263},'Kennyyo89': {C1:20120,C3:19732,C4:21096,C6:27091,C8:29904,C10:30586},'Burning_Ham': {C1:20127,C3:19178,C4:20808,C6:26844,C7:29191,C8:29313,C10:29850},'Papossib': {C1:20175,C3:19998,C4:21124,C6:27237,C8:30374,C10:30740},'[CORT] parasite': {C1:20213,C3:20218,C4:21186,C6:27428,C7:29871,C8:30667,C10:30751}};
+function tmParseMs(v){let t=(v||'').trim();if(!t) return null;let mm=t.match(/^(\d+):(\d{1,2})\.(\d{1,3})$/);if(!mm) return null;return parseInt(mm[1])*60000+parseInt(mm[2])*1000+parseInt(mm[3]);}
+function tmUpdateGeneral(){
+ let CIRC=['C1','C2','C3','C4','C5','C6','C7','C8','C9','C10'];
+ let PTS=[32,26,22,19,17,15,13,11,9,7,5,4,3,2,1,0];
+ // Construit les temps complets = TM_BASE + temps C7 actuels (tm)
+ let full={}; Object.keys(TM_BASE).forEach(function(p){full[p]=Object.assign({},TM_BASE[p]);});
+ tm.forEach(function(r){if(r.time){let ms=tmParseMs(r.time); if(ms!=null) full[r.name].C7=ms; else delete full[r.name].C7;} else {delete full[r.name].C7;}});
+ let pilots=Object.keys(full); let totals={}; let per={};
+ pilots.forEach(function(p){totals[p]=0; per[p]={};});
+ CIRC.forEach(function(c){let ranked=pilots.filter(function(p){return full[p][c]!=null;}).sort(function(a,b){return full[a][c]-full[b][c];}); ranked.forEach(function(p,i){let pts=PTS[i]||0; per[p][c]=pts; totals[p]+=pts;}); pilots.forEach(function(p){if(per[p][c]==null) per[p][c]='-';});});
+ let order=pilots.sort(function(a,b){return totals[b]-totals[a];});
+ let g='<table><tr><th>Pos</th><th>Pilote</th><th>Total</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th><th>C7</th><th>C8</th><th>C9</th><th>C10</th></tr>';
+ order.forEach(function(p,i){let cc=i==0?'pos1':i==1?'pos2':i==2?'pos3':''; g+='<tr class="'+cc+'"><td>'+(i+1)+'</td><td>'+p+'</td><td>'+totals[p]+'</td>'; CIRC.forEach(function(c){g+='<td>'+per[p][c]+'</td>';}); g+='</tr>';});
+ g+='</table>';
+ let el=document.getElementById('tmGenTable'); if(el) el.innerHTML=g;
+}
+function tmRender(){
+ let sorted=[...tm].sort((a,b)=>tmToSec(a.time)-tmToSec(b.time));
+ let ref=tmToSec(sorted[0].time);
+ let h='<table><tr><th>Pos</th><th>Pilote</th><th>Temps</th><th>Points</th><th>Ecart</th></tr>';
+ sorted.forEach((r,i)=>{let c=i==0?'pos1':i==1?'pos2':i==2?'pos3':'';let pts=r.time?tmPointsForRank(i):0;let gap=r.time?'+'+(tmToSec(r.time)-ref).toFixed(3):'-';if(i===0)gap='-';let cell=tmEditing?`<input data-tm="${r.name}" value="${r.time}" placeholder="0:29.191">`:(r.time||'<span class="small">Pas de temps</span>');h+=`<tr class="${c}"><td>${i+1}</td><td>${r.name}</td><td>${cell}</td><td>${pts}</td><td>${gap}</td></tr>`;});
+ h+='</table><p class="small">5 / 11 pilotes ont un temps sur C7.</p>';document.getElementById('tmTable').innerHTML=h;
+ document.getElementById('tmSaveBtn').classList.toggle('hidden',!tmEditing);
+ try{tmUpdateGeneral();}catch(e){}
+ document.getElementById('tmCancelBtn').classList.toggle('hidden',!tmEditing);
+}
+function tmUnlock(){let c=prompt('Code admin :');if(c==='9645'){tmEditing=true;document.getElementById('tmMsg').innerHTML='<span class="ok">Code accepte. Tu peux modifier les temps Circuit 7.</span>';tmRender();}else{document.getElementById('tmMsg').innerHTML='<span class="err">Code incorrect.</span>';}}
+function tmSave(){document.querySelectorAll('#tmTable input').forEach(inp=>{let p=tm.find(x=>x.name===inp.dataset.tm);if(p)p.time=inp.value.trim();});tmEditing=false;tmRender();document.getElementById('tmMsg').innerHTML='<span class="ok">Temps Trackmania enregistres. Pense a telecharger times.json et le mettre sur GitHub pour que ca reste.</span>';}
+function tmDownload(){let full={'[CORT] Nicolas Richard': {C1:20168,C3:19798,C4:21120,C6:27144,C7:30468,C8:29902,C10:30681},'mathYeuu2.0': {C1:20110,C3:19298,C4:20963,C6:26984,C8:29841,C10:30085},'m0ugg': {C1:20184,C3:19622,C4:20934,C6:27188,C7:31340,C8:29780,C10:30390},'Deuxfrai': {C1:20741,C3:20505,C4:21598,C8:30692,C10:31821},'Strakiste': {C1:20145,C3:20265,C4:20981,C6:27196,C7:29896,C8:30327,C10:30328},'Esyole': {C1:20146,C3:20183,C4:21595,C6:27426,C10:30574},'Anyri23': {C1:20118,C3:19459,C4:20960,C6:27042,C8:29896,C10:30263},'Kennyyo89': {C1:20120,C3:19732,C4:21096,C6:27091,C8:29904,C10:30586},'Burning_Ham': {C1:20127,C3:19178,C4:20808,C6:26844,C7:29191,C8:29313,C10:29850},'Papossib': {C1:20175,C3:19998,C4:21124,C6:27237,C8:30374,C10:30740},'[CORT] parasite': {C1:20213,C3:20218,C4:21186,C6:27428,C7:29871,C8:30667,C10:30751}}; tm.forEach(function(r){if(r.time){let mm=r.time.match(/^(\d+):(\d{1,2})\.(\d{1,3})$/); if(mm){full[r.name].C7=parseInt(mm[1])*60000+parseInt(mm[2])*1000+parseInt(mm[3]);} else {delete full[r.name].C7;}} else {delete full[r.name].C7;}}); let data={times:full}; let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='times.json'; a.click(); document.getElementById('tmMsg').innerHTML='<span class="ok">times.json telecharge (format complet, tous circuits conserves). Mets-le dans GitHub.</span>';}
+tmRender();
+try{tmUpdateGeneral();}catch(e){}
+// Charge times.json de GitHub si present
+try{fetch('times.json').then(function(r){if(!r.ok) return null; return r.json();}).then(function(d){if(!d) return; let t=d.times||d; let changed=false; tm.forEach(function(r){if(t[r.name] && t[r.name].C7!=null){let ms=t[r.name].C7; let m=Math.floor(ms/60000); let s=Math.floor((ms%60000)/1000); let milli=ms%1000; r.time=m+':'+String(s).padStart(2,'0')+'.'+String(milli).padStart(3,'0'); changed=true;} else if(t[r.name] && t[r.name].C7==null){r.time=''; changed=true;}}); if(changed) tmRender();}).catch(function(){});}catch(e){}
+let acc=[{name:"GregZ",time:"1:57,212"},{name:"CORTbigfoss2",time:"1:57,975"},{name:"[CORT] Nicolas",time:"1:58,175"},{name:"mikamugen",time:"1:58,622"},{name:"XRS 486 K\u00fcB\u00fc",time:"1:58,670"},{name:"[CORT] 4cordes",time:"1:59,747"},{name:"nico-81100-",time:"2:00,147"},{name:"m0ugg",time:"2:00,467"},{name:"Leparasite8377",time:"2:00,610"},{name:"Yannz",time:""},{name:"Papossib",time:""},{name:"Deuxfrai",time:""},{name:"Stephskippy66",time:""}];
+let editing=false;
+function toSec(t){if(!t)return 9999;let p=t.trim().replace(',','.').split(':');return parseInt(p[0])*60+parseFloat(p[1]||0);}
+function accRender(){let sorted=[...acc].sort((a,b)=>toSec(a.time)-toSec(b.time));let ref=toSec(sorted[0].time);let h='<table><tr><th>Pos</th><th>Pilote</th><th>Temps</th><th>Ecart 1er</th><th>Ecart prec.</th></tr>';sorted.forEach((r,i)=>{let c=i==0?'pos1':i==1?'pos2':i==2?'pos3':'';let gap=r.time?'+'+(toSec(r.time)-ref).toFixed(3).replace('.',','):'-';if(i===0)gap='-';let prev='-';if(i>0&&r.time&&sorted[i-1].time)prev='+'+(toSec(r.time)-toSec(sorted[i-1].time)).toFixed(3).replace('.',',');let cell=editing?`<input data-name="${r.name}" value="${r.time}" placeholder="1:57,212">`:(r.time||'<span class="small">Pas de temps</span>');h+=`<tr class="${c}"><td>${i+1}</td><td>${r.name}</td><td>${cell}</td><td>${gap}</td><td>${prev}</td></tr>`;});h+='</table>';document.getElementById('accHotTable').innerHTML=h;document.getElementById('accSaveBtn').classList.toggle('hidden',!editing);document.getElementById('accCancelBtn').classList.toggle('hidden',!editing);}
+function accUnlock(){let c=prompt('Code admin :');if(c==='9645'){editing=true;document.getElementById('accMsg').innerHTML='<span class="ok">Code accepte. Tu peux modifier les temps.</span>';fetch('acc.json').then(r=>{if(!r.ok) throw 0; return r.json();}).then(d=>{let list=d.hotlap||d.times||d; if(Array.isArray(list)){list.forEach(it=>{let p=acc.find(x=>x.name===(it.name||it.pilot)); if(p) p.time=it.time||'';}); accRender(); let leader=[...acc].filter(x=>x.time).sort((a,b)=>toSec(a.time)-toSec(b.time))[0]; if(leader) document.getElementById('homeAccLeader').textContent=leader.name+' - '+leader.time;}}).catch(()=>{});
+accRender();}else{document.getElementById('accMsg').innerHTML='<span class="err">Code incorrect.</span>';}}
+function accSave(){document.querySelectorAll('#accHotTable input').forEach(inp=>{let p=acc.find(x=>x.name===inp.dataset.name);if(p)p.time=inp.value.trim();});editing=false;fetch('acc.json').then(r=>{if(!r.ok) throw 0; return r.json();}).then(d=>{let list=d.hotlap||d.times||d; if(Array.isArray(list)){list.forEach(it=>{let p=acc.find(x=>x.name===(it.name||it.pilot)); if(p) p.time=it.time||'';}); accRender(); let leader=[...acc].filter(x=>x.time).sort((a,b)=>toSec(a.time)-toSec(b.time))[0]; if(leader) document.getElementById('homeAccLeader').textContent=leader.name+' - '+leader.time;}}).catch(()=>{});
+accRender();let leader=[...acc].filter(x=>x.time).sort((a,b)=>toSec(a.time)-toSec(b.time))[0];if(leader)document.getElementById('homeAccLeader').textContent=leader.name+' - '+leader.time;document.getElementById('accMsg').innerHTML='<span class="ok">Temps enregistres.</span>';}
+function accDownload(){let data={game:"ACC",event:"Hotlap Paul Ricard",car:"Porsche 992 GT3 Cup 2021",updated:new Date().toISOString(),hotlap:acc};let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc.json';a.click();document.getElementById('accMsg').innerHTML='<span class="ok">acc.json telecharge. Mets-le dans GitHub avec Add file / Upload files.</span>';}
+fetch('acc.json').then(r=>{if(!r.ok) throw 0; return r.json();}).then(d=>{let list=d.hotlap||d.times||d; if(Array.isArray(list)){list.forEach(it=>{let p=acc.find(x=>x.name===(it.name||it.pilot)); if(p) p.time=it.time||'';}); accRender(); let leader=[...acc].filter(x=>x.time).sort((a,b)=>toSec(a.time)-toSec(b.time))[0]; if(leader) document.getElementById('homeAccLeader').textContent=leader.name+' - '+leader.time;}}).catch(()=>{});
+accRender();
+</script></body></html>

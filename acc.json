@@ -2,7 +2,7 @@
   "game": "ACC",
   "event": "Hotlap Spa",
   "car": "Porsche 992 GT3 Cup 2021",
-  "updated": "2026-11-25T09:42:53.725Z",
+  "updated": "2026-11-25T09:45:50.991Z",
   "hotlap": [
     {
       "name": "Greg Z",
@@ -18,7 +18,7 @@
     },
     {
       "name": "mikamugen",
-      "time": "-"
+      "time": ""
     },
     {
       "name": "XRS 486 KüBü",
@@ -42,7 +42,7 @@
     },
     {
       "name": "Yannz",
-      "time": "-"
+      "time": ""
     },
     {
       "name": "Papossib",
@@ -57,11 +57,11 @@
       "time": ""
     },
     {
-      "name": "Mikamugen",
+      "name": "mikamugen",
       "time": ""
     },
     {
-      "name": "yannz",
+      "name": "Yannz",
       "time": ""
     }
   ],
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "name": "CORT bigfoss2",
+      "name": "[CORT] bigfoss2",
       "total": "122",
       "vals": [
         "13",
@@ -135,7 +135,7 @@
       ]
     },
     {
-      "name": "CORT 4cordes",
+      "name": "[CORT] 4cordes",
       "total": "91",
       "vals": [
         "9",
@@ -169,7 +169,7 @@
       ]
     },
     {
-      "name": "CORT parasite",
+      "name": "[CORT] parasite",
       "total": "71",
       "vals": [
         "6",
@@ -237,7 +237,7 @@
       ]
     },
     {
-      "name": "Mikamugen",
+      "name": "mikamugen",
       "total": "11",
       "vals": [
         "-",
@@ -254,7 +254,7 @@
       ]
     },
     {
-      "name": "yannz",
+      "name": "Yannz",
       "total": "8",
       "vals": [
         "-",

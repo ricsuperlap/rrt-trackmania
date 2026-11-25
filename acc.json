@@ -2,7 +2,7 @@
   "game": "ACC",
   "event": "Hotlap Spa",
   "car": "Porsche 992 GT3 Cup 2021",
-  "updated": "2026-11-25T09:45:50.991Z",
+  "updated": "2026-11-25T10:37:21.098Z",
   "hotlap": [
     {
       "name": "Greg Z",
@@ -15,10 +15,6 @@
     {
       "name": "[CORT] Nicolas",
       "time": "-"
-    },
-    {
-      "name": "mikamugen",
-      "time": ""
     },
     {
       "name": "XRS 486 KüBü",
@@ -41,10 +37,6 @@
       "time": "-"
     },
     {
-      "name": "Yannz",
-      "time": ""
-    },
-    {
       "name": "Papossib",
       "time": ""
     },
@@ -54,14 +46,6 @@
     },
     {
       "name": "Stephskippy66",
-      "time": ""
-    },
-    {
-      "name": "mikamugen",
-      "time": ""
-    },
-    {
-      "name": "Yannz",
       "time": ""
     }
   ],
@@ -232,40 +216,6 @@
         "5",
         "-",
         "3",
-        "-",
-        "-"
-      ]
-    },
-    {
-      "name": "mikamugen",
-      "total": "11",
-      "vals": [
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "11",
-        "-",
-        "-"
-      ]
-    },
-    {
-      "name": "Yannz",
-      "total": "8",
-      "vals": [
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "8",
         "-",
         "-"
       ]

@@ -2,7 +2,7 @@
   "game": "ACC",
   "event": "Hotlap Paul Ricard",
   "car": "Porsche 992 GT3 Cup 2021",
-  "updated": "2026-11-25T08:55:28.674Z",
+  "updated": "2026-11-25T08:58:41.637Z",
   "hotlap": [
     {
       "name": "GregZ",
@@ -55,6 +55,14 @@
     {
       "name": "Stephskippy66",
       "time": ""
+    },
+    {
+      "name": "Mikamugen",
+      "time": ""
+    },
+    {
+      "name": "yannz",
+      "time": ""
     }
   ],
   "general": [
@@ -93,7 +101,7 @@
       ]
     },
     {
-      "name": "BSR Greg Z",
+      "name": "Greg Z",
       "total": "100",
       "vals": [
         "12",
@@ -236,6 +244,40 @@
         "-",
         "4",
         "3",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ]
+    },
+    {
+      "name": "Mikamugen",
+      "total": "0",
+      "vals": [
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ]
+    },
+    {
+      "name": "yannz",
+      "total": "0",
+      "vals": [
+        "-",
+        "-",
+        "-",
+        "-",
         "-",
         "-",
         "-",

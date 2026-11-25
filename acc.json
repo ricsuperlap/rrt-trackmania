@@ -2,7 +2,7 @@
   "game": "ACC",
   "event": "Hotlap Paul Ricard",
   "car": "Porsche 992 GT3 Cup 2021",
-  "updated": "2026-11-25T08:52:12.251Z",
+  "updated": "2026-11-25T08:55:28.674Z",
   "hotlap": [
     {
       "name": "GregZ",
@@ -37,7 +37,7 @@
       "time": "2:00,155"
     },
     {
-      "name": "Leparasite8377",
+      "name": "[CORT] parasite",
       "time": "1:59,475"
     },
     {
@@ -161,7 +161,7 @@
       ]
     },
     {
-      "name": "VBR parasite",
+      "name": "CORT parasite",
       "total": "64",
       "vals": [
         "6",

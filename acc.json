@@ -2,7 +2,7 @@
   "game": "ACC",
   "event": "Hotlap Spa",
   "car": "Porsche 992 GT3 Cup 2021",
-  "updated": "2026-11-25T09:40:57.850Z",
+  "updated": "2026-11-25T09:42:53.725Z",
   "hotlap": [
     {
       "name": "Greg Z",
@@ -118,7 +118,7 @@
       ]
     },
     {
-      "name": "CORT Nicolas R",
+      "name": "[CORT] Nicolas",
       "total": "106",
       "vals": [
         "11",
